@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radar Regulatorio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ── Sidebar ───────────────────────────────────────────────────────────── -->
+<aside id="sidebar">
+  <div class="brand">
+    <span style="font-size:1.5rem;">📡</span>
+    <span>Radar Regulatorio</span>
+  </div>
+  <nav>
+    <a href="#dashboard" class="nav-link active" data-page="dashboard">
+      <span class="icon">📊</span> Dashboard
+    </a>
+    <a href="#inbox" class="nav-link" data-page="inbox">
+      <span class="icon">📥</span> Bandeja de revisión
+    </a>
+    <a href="#detail" class="nav-link" data-page="detail">
+      <span class="icon">🔍</span> Detalle normativa
+    </a>
+    <a href="#tracking" class="nav-link" data-page="tracking">
+      <span class="icon">📋</span> Seguimiento
+    </a>
+    <a href="#export" class="nav-link" data-page="export">
+      <span class="icon">📤</span> Exportar
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    MVP · Compliance Radar<br/>
+    Datos actualizados por GitHub Actions
+  </div>
+</aside>
+
+<!-- ── Main ──────────────────────────────────────────────────────────────── -->
+<div id="main">
+  <header id="topbar">
+    <h1 id="page-title">Dashboard</h1>
+    <div class="topbar-actions">
+      <span id="last-updated" style="font-size:.75rem;color:#64748b;"></span>
+      <button class="btn btn-secondary btn-sm" onclick="App.reload()">↺ Actualizar</button>
+    </div>
+  </header>
+
+  <main id="content">
+    <div class="loader" id="global-loader"><div class="spinner"></div></div>
+
+    <!-- ── DASHBOARD ────────────────────────────────────────────────────── -->
+    <div id="page-dashboard" class="page" style="display:none;">
+      <div class="page-header">
+        <h1>Dashboard Ejecutivo</h1>
+      </div>
+      <div class="kpi-grid" id="kpi-grid"></div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <h3>Distribución por País</h3>
+          <canvas id="chart-country" height="220"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Top Reguladores</h3>
+          <canvas id="chart-regulator" height="220"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Normas por Categoría Temática</h3>
+        <canvas id="chart-category" height="130"></canvas>
+      </div>
+    </div>
+
+    <!-- ── INBOX ────────────────────────────────────────────────────────── -->
+    <div id="page-inbox" class="page" style="display:none;">
+      <div class="page-header">
+        <h1>Bandeja de Revisión</h1>
+        <span id="inbox-count" style="font-size:.85rem;color:#64748b;"></span>
+      </div>
+      <div class="table-card">
+        <div class="table-toolbar">
+          <input type="text" id="filter-search" placeholder="🔍  Buscar por título…" oninput="Inbox.render()" />
+          <select id="filter-country" onchange="Inbox.render()">
+            <option value="">Todos los países</option>
+            <option value="Chile">Chile</option>
+            <option value="Colombia">Colombia</option>
+          </select>
+          <select id="filter-status" onchange="Inbox.render()">
+            <option value="">Todos los estados</option>
+            <option value="nuevo">Nuevo</option>
+            <option value="en_revision">En revisión</option>
+            <option value="aplica_requiere_accion">Aplica (acción)</option>
+            <option value="aplica_informativo">Aplica (info)</option>
+            <option value="no_aplica">No aplica</option>
+            <option value="implementado">Implementado</option>
+            <option value="vencido">Vencido</option>
+          </select>
+          <select id="filter-risk" onchange="Inbox.render()">
+            <option value="">Todos los niveles</option>
+            <option value="crítico">🔴 Crítico</option>
+            <option value="alto">🟠 Alto</option>
+            <option value="medio">🟡 Medio</option>
+            <option value="bajo">🟢 Bajo</option>
+          </select>
+        </div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>País</th>
+                <th>Regulador</th>
+                <th>Tipo</th>
+                <th>Título</th>
+                <th>Score</th>
+                <th>Nivel</th>
+                <th>Categoría</th>
+                <th>Estado</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="inbox-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── DETAIL ────────────────────────────────────────────────────────── -->
+    <div id="page-detail" class="page" style="display:none;">
+      <div class="page-header">
+        <button class="btn btn-secondary btn-sm" onclick="App.navigate('inbox')">← Volver</button>
+        <div id="detail-status-badge"></div>
+      </div>
+      <h1 id="detail-title" style="font-size:1.2rem;font-weight:700;margin-bottom:20px;line-height:1.4;"></h1>
+      <div class="meta-row" id="detail-meta"></div>
+
+      <div class="tabs">
+        <div class="tab active" data-tab="analysis">📑 Análisis IA</div>
+        <div class="tab" data-tab="original">📄 Texto original</div>
+        <div class="tab" data-tab="tracking-form">✏️ Seguimiento</div>
+      </div>
+
+      <div id="tab-analysis" class="tab-pane active">
+        <div class="kpi-grid" id="detail-kpis" style="margin-bottom:20px;"></div>
+        <div class="detail-grid" id="detail-analysis-grid"></div>
+      </div>
+
+      <div id="tab-original" class="tab-pane">
+        <div class="detail-card">
+          <h3>Fuente</h3>
+          <p><a id="detail-source-link" href="#" target="_blank" style="color:var(--accent);">Ver documento original →</a></p>
+        </div>
+        <br/>
+        <div class="detail-card">
+          <h3>Información del documento</h3>
+          <div id="detail-original-info" style="font-size:.875rem;line-height:1.8;"></div>
+        </div>
+      </div>
+
+      <div id="tab-tracking-form" class="tab-pane">
+        <div class="detail-card">
+          <h3>Registrar seguimiento</h3>
+          <form id="tracking-form" onsubmit="TrackingForm.save(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>¿Aplica?</label>
+                <select id="tf-applies" required>
+                  <option value="sí">Sí</option>
+                  <option value="no">No</option>
+                  <option value="revisar">Revisar</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Área responsable</label>
+                <select id="tf-area">
+                  <option>Compliance</option><option>Legal</option><option>Fraude</option>
+                  <option>Operaciones</option><option>Producto</option><option>Finanzas</option>
+                  <option>Tecnología</option><option>Data</option><option>CX</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Encargado</label>
+                <input type="text" id="tf-owner" placeholder="Nombre del responsable" />
+              </div>
+              <div class="form-group">
+                <label>Fecha límite</label>
+                <input type="date" id="tf-due-date" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Nivel de impacto</label>
+                <select id="tf-impact">
+                  <option value="bajo">Bajo</option><option value="medio">Medio</option>
+                  <option value="alto">Alto</option><option value="crítico">Crítico</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Estado de avance</label>
+                <select id="tf-progress">
+                  <option value="pendiente_revision">⏳ Pendiente revisión</option>
+                  <option value="asignado">👤 Asignado</option>
+                  <option value="en_implementacion">🔧 En implementación</option>
+                  <option value="bloqueado">🚫 Bloqueado</option>
+                  <option value="implementado">✅ Implementado</option>
+                  <option value="cerrado">🔒 Cerrado</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Acción requerida</label>
+              <textarea id="tf-action" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Plan de acción</label>
+              <textarea id="tf-plan" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Comentarios</label>
+              <textarea id="tf-comments" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label>URL evidencia</label>
+              <input type="url" id="tf-evidence" placeholder="https://…" />
+            </div>
+            <button type="submit" class="btn btn-primary">💾 Guardar seguimiento</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── TRACKING ──────────────────────────────────────────────────────── -->
+    <div id="page-tracking" class="page" style="display:none;">
+      <div class="page-header">
+        <h1>Seguimiento Regulatorio</h1>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-secondary btn-sm" onclick="Tracking.setView('kanban')" id="btn-kanban">Kanban</button>
+          <button class="btn btn-secondary btn-sm" onclick="Tracking.setView('table')" id="btn-table">Tabla</button>
+        </div>
+      </div>
+      <div id="tracking-kanban"></div>
+      <div id="tracking-table" style="display:none;">
+        <div class="table-card">
+          <div style="overflow-x:auto;">
+            <table>
+              <thead><tr>
+                <th>Normativa</th><th>País</th><th>Área</th><th>Encargado</th>
+                <th>Fecha límite</th><th>Impacto</th><th>Estado avance</th><th>Score</th>
+              </tr></thead>
+              <tbody id="tracking-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EXPORT ────────────────────────────────────────────────────────── -->
+    <div id="page-export" class="page" style="display:none;">
+      <div class="page-header"><h1>Exportar Bitácora</h1></div>
+      <div class="detail-card" style="max-width:560px;">
+        <h3>Bitácora de Monitoreo Regulatorio</h3>
+        <p style="margin:12px 0;font-size:.875rem;color:#64748b;">
+          Genera el archivo Excel con todas las normas y su seguimiento, en el formato estándar de Compliance.
+        </p>
+        <div class="form-group">
+          <label>Filtrar por país</label>
+          <select id="exp-country">
+            <option value="">Todos</option>
+            <option value="Chile">Chile</option>
+            <option value="Colombia">Colombia</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Filtrar por estado</label>
+          <select id="exp-status">
+            <option value="">Todos</option>
+            <option value="nuevo">Nuevo</option>
+            <option value="en_revision">En revisión</option>
+            <option value="aplica_requiere_accion">Aplica (acción)</option>
+            <option value="aplica_informativo">Aplica (info)</option>
+            <option value="no_aplica">No aplica</option>
+            <option value="implementado">Implementado</option>
+          </select>
+        </div>
+        <div id="export-preview" style="margin:16px 0;font-size:.85rem;color:#475569;"></div>
+        <button class="btn btn-primary" onclick="Export.downloadExcel()">📥 Descargar Excel</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ── Toast container ───────────────────────────────────────────────────── -->
+<div id="toast-container"></div>
+
+<!-- ── Scripts ───────────────────────────────────────────────────────────── -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="js/data.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/inbox.js"></script>
+<script src="js/detail.js"></script>
+<script src="js/tracking.js"></script>
+<script src="js/export.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

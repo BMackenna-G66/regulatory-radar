@@ -1,139 +1,130 @@
-# 📡 Radar Regulatorio – MVP
+# 📡 Radar Regulatorio
 
 Plataforma interna para automatizar la captura, análisis, clasificación, priorización, seguimiento y reporte de cambios regulatorios en Chile y Colombia.
 
-## Stack
-
-| Capa | Tecnología |
-|------|-----------|
-| UI | Streamlit |
-| DB | SQLite |
-| Scraping | requests + BeautifulSoup |
-| IA | Claude API (Anthropic) |
-| Procesamiento | pandas |
-| Export | openpyxl |
-| Config | python-dotenv + PyYAML |
-
-## Instalación rápida
-
-### 1. Clonar repositorio
-
-```bash
-git clone https://github.com/BMackenna-G66/regulatory-radar.git
-cd regulatory-radar
-```
-
-### 2. Crear entorno virtual
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate        # macOS/Linux
-# .venv\Scripts\activate         # Windows
-```
-
-### 3. Instalar dependencias
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Configurar variables de entorno
-
-```bash
-cp .env.example .env
-# Editar .env y agregar tu ANTHROPIC_API_KEY
-```
-
-### 5. Ejecutar la app
-
-```bash
-streamlit run app.py
-```
-
-La app abrirá automáticamente en `http://localhost:8501`.
+**→ [Ver plataforma en vivo](https://bmackenna-g66.github.io/regulatory-radar/)**
 
 ---
 
-## Primeros pasos
+## Arquitectura
 
-1. **Cargar datos**: Ve a ⚙️ Configuración → "Cargar datos de prueba" para ver la app con datos de muestra
-2. **Scraping real**: Ve a ⚙️ Configuración → Scraping → selecciona fuentes → "Ejecutar scraping"
-3. **Análisis IA**: Ve a ⚙️ Configuración → Análisis IA → "Analizar con IA" (requiere API key)
-4. **Revisar normas**: Ve a 📥 Bandeja de revisión
-5. **Ver detalle**: Haz clic en cualquier norma → registra seguimiento
-6. **Exportar**: Ve a 📤 Exportar → descarga Excel
+```
+regulatory-radar/
+│
+├── docs/                        ← GitHub Pages (frontend estático)
+│   ├── index.html               ← SPA: Dashboard, Bandeja, Detalle, Seguimiento, Exportar
+│   ├── css/style.css
+│   ├── js/
+│   │   ├── app.js               ← Router + init
+│   │   ├── data.js              ← Carga JSON + merge con tracking
+│   │   ├── dashboard.js         ← KPIs + charts (Chart.js)
+│   │   ├── inbox.js             ← Bandeja de revisión filtrable
+│   │   ├── detail.js            ← Vista detalle + formulario seguimiento
+│   │   ├── tracking.js          ← Kanban / tabla + localStorage
+│   │   └── export.js            ← Exportar Excel (SheetJS)
+│   └── data/
+│       ├── regulatory_items.json  ← ⟵ generado por GitHub Actions
+│       └── ai_analysis.json       ← ⟵ generado por GitHub Actions
+│
+├── scripts/                     ← Python (corre en GitHub Actions)
+│   ├── scraper.py               ← Scraping de fuentes regulatorias
+│   ├── analyzer.py              ← Análisis con Claude API (+ fallback reglas)
+│   ├── scoring.py               ← Scoring determinístico 0–100
+│   └── requirements.txt
+│
+├── .github/workflows/
+│   ├── scrape.yml               ← Scraping automático (L–V 09:00 UTC)
+│   └── analyze.yml              ← Análisis IA al terminar el scraping
+│
+└── config/
+    └── sources.yaml             ← Fuentes configurables
+```
+
+**Flujo de datos:**
+```
+GitHub Actions (scraper.py)
+  → docs/data/regulatory_items.json   (commit automático)
+  → dispara analyze.yml
+
+GitHub Actions (analyzer.py)
+  → docs/data/ai_analysis.json        (commit automático)
+  → GitHub Pages sirve los JSON actualizados
+
+Browser del usuario
+  → carga los JSON via fetch()
+  → tracking guardado en localStorage
+```
 
 ---
 
-## Estructura del proyecto
+## Vistas
 
-```
-regulatory_radar/
-│
-├── app.py                    # Streamlit app (punto de entrada)
-├── requirements.txt
-├── .env.example
-├── README.md
-│
-├── config/
-│   └── sources.yaml          # Configuración de fuentes regulatorias
-│
-├── data/
-│   └── regulatory_radar.db   # SQLite (se crea automáticamente)
-│
-├── src/
-│   ├── database.py           # CRUD y conexión SQLite
-│   ├── models.py             # Dataclasses
-│   ├── scoring.py            # Scoring de impacto (determinístico)
-│   ├── applicability.py      # Motor de aplicabilidad
-│   ├── alerts.py             # Sistema de alertas
-│   ├── exports.py            # Exportación Excel
-│   ├── utils.py              # Utilidades compartidas
-│   │
-│   ├── scrapers/
-│   │   ├── base_scraper.py   # Clase base abstracta
-│   │   ├── cmf_scraper.py    # CMF Chile
-│   │   ├── banco_central_scraper.py  # Banco Central Chile
-│   │   ├── diario_oficial_scraper.py # Diario Oficial Chile
-│   │   ├── sfc_scraper.py    # SFC Colombia
-│   │   └── generic_scraper.py        # Scraper configurable genérico
-│   │
-│   └── ai/
-│       ├── analyzer.py       # Integración Claude API
-│       └── prompts.py        # Prompts para análisis
-│
-└── logs/
-    └── radar.log             # Logs de operación
-```
+| Vista | Descripción |
+|-------|-------------|
+| **📊 Dashboard** | KPIs + gráficos por país, regulador y categoría |
+| **📥 Bandeja** | Tabla filtrable con score, nivel de riesgo y estado |
+| **🔍 Detalle** | Análisis IA completo + formulario de seguimiento |
+| **📋 Seguimiento** | Kanban por estado de avance + vista tabla |
+| **📤 Exportar** | Descarga Excel (Bitácora Monitoreo Regulatorio) |
 
 ---
 
 ## Fuentes configuradas
 
-| País | Fuente | Habilitada |
-|------|--------|-----------|
-| Chile | CMF – Normas y Circulares | ✅ |
-| Chile | Banco Central de Chile | ✅ |
-| Chile | Diario Oficial | ✅ |
-| Chile | SII | ✅ |
-| Colombia | Superintendencia Financiera (Circulares Externas) | ✅ |
-| Colombia | SFC Cartas Circulares | ✅ |
-| Chile | Cámara de Diputados | ⏸️ (configurable) |
-| Chile | Congreso Nacional | ⏸️ (configurable) |
-
-Para agregar nuevas fuentes: editar `config/sources.yaml`.
+| País | Fuente | Estado |
+|------|--------|--------|
+| Chile | CMF – Normas y Circulares | ✅ Activo |
+| Chile | Banco Central de Chile | ✅ Activo |
+| Chile | Diario Oficial | ✅ Activo |
+| Chile | SII | ✅ Activo |
+| Colombia | Superintendencia Financiera (Circulares Externas + Cartas) | ✅ Activo |
 
 ---
 
-## Scoring de impacto
+## Configuración inicial
+
+### 1. Agregar el secret de Anthropic
+
+En GitHub → Settings → Secrets → Actions → **New repository secret**:
+
+```
+Name:  ANTHROPIC_API_KEY
+Value: sk-ant-...
+```
+
+> Sin API key el analyzer usa un motor de reglas determinístico como fallback.
+
+### 2. Habilitar GitHub Pages
+
+Settings → Pages → Source: **Deploy from branch** → Branch: `main` → Folder: `/docs`
+
+### 3. Ejecutar scraping inicial
+
+Actions → **🕷️ Daily Regulatory Scraping** → **Run workflow**
+
+Esto disparará automáticamente el análisis IA y publicará los datos.
+
+---
+
+## Correr localmente
+
+```bash
+cd docs
+python3 -m http.server 8080
+# Abrir http://localhost:8080
+```
+
+---
+
+## Scoring de impacto (determinístico)
 
 | Condición | Puntos |
 |-----------|--------|
 | Sanciones / multas / incumplimiento | +30 |
-| AML / LA-FT / lavado | +25 |
+| AML / LA-FT / lavado de activos | +25 |
 | KYC / debida diligencia | +20 |
 | Plazos obligatorios | +20 |
-| Reportes regulatorios | +15 |
+| Reportes regulatorios (ROS/RTE) | +15 |
 | Operaciones / pagos / clientes | +15 |
 | Proyecto de ley / consulta pública | +10 |
 | Regulador financiero principal | +10 |
@@ -148,35 +139,12 @@ Para agregar nuevas fuentes: editar `config/sources.yaml`.
 
 ---
 
-## Análisis sin API key
+## Categorías temáticas
 
-Si no tienes una `ANTHROPIC_API_KEY`, el sistema usa un **motor de reglas determinístico** como fallback que:
-- Calcula el risk score automáticamente
-- Detecta categoría temática por palabras clave
-- Sugiere área responsable
-- Genera resumen básico
+AML · KYC · Fraude · Sanciones · PEP · Protección al consumidor · Datos personales · Criptoactivos · Tributario · Operacional · Otros
 
 ---
 
-## Roadmap futuro
+## Seguimiento (localStorage)
 
-- [ ] Scraping con JavaScript rendering (Playwright/Selenium)
-- [ ] Integración Slack/email para alertas
-- [ ] Scheduler automático (cron diario)
-- [ ] Búsqueda full-text en textos de normas
-- [ ] Exportación a PDF
-- [ ] API REST para integración con otros sistemas
-- [ ] Soporte multi-tenant / multi-empresa
-- [ ] Fuentes adicionales: SEC, CNBV México, SBS Perú
-
----
-
-## Variables de entorno
-
-| Variable | Descripción | Requerida |
-|----------|-------------|-----------|
-| `ANTHROPIC_API_KEY` | API key de Anthropic (Claude) | Recomendada |
-| `DB_PATH` | Ruta a la base de datos SQLite | No (default: `data/regulatory_radar.db`) |
-| `LOG_LEVEL` | Nivel de logging (INFO/DEBUG/WARNING) | No |
-| `SLACK_WEBHOOK_URL` | Webhook de Slack para alertas | No |
-| `CLAUDE_MODEL` | Modelo de Claude a usar | No (default: `claude-sonnet-4-6`) |
+El seguimiento de normas se persiste en `localStorage` del navegador. Para MVP single-user (un analista de Compliance) es suficiente. Para uso multi-usuario se requiere un backend o sincronización via GitHub API.
