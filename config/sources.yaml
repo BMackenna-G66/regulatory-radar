@@ -1,0 +1,107 @@
+sources:
+  # ── CHILE ──────────────────────────────────────────────────────────────────
+  - id: cmf_chile
+    name: CMF Chile
+    country: Chile
+    regulator: CMF
+    enabled: true
+    scraper: cmf
+    base_url: https://www.cmfchile.cl
+    paths:
+      - /legislacion-normativa/normativa/normas-de-caracter-general
+      - /legislacion-normativa/normativa/circulares
+    document_types:
+      - Norma de Carácter General
+      - Circular
+      - Resolución
+
+  - id: banco_central_chile
+    name: Banco Central de Chile
+    country: Chile
+    regulator: Banco Central de Chile
+    enabled: true
+    scraper: banco_central
+    base_url: https://www.bcentral.cl
+    paths:
+      - /web/banco-central/publicaciones/recopilacion-de-normativa
+    document_types:
+      - Capítulo
+      - Resolución
+
+  - id: diario_oficial_chile
+    name: Diario Oficial de Chile
+    country: Chile
+    regulator: Diario Oficial
+    enabled: true
+    scraper: diario_oficial
+    base_url: https://www.diariooficial.interior.gob.cl
+    document_types:
+      - Ley
+      - Decreto
+      - Resolución
+      - Norma
+
+  - id: sii_chile
+    name: SII Chile
+    country: Chile
+    regulator: SII
+    enabled: true
+    scraper: generic
+    base_url: https://www.sii.cl
+    list_url: https://www.sii.cl/normativa_legislacion/resoluciones/index.html
+    item_selector: "table.tabla tr"
+    title_selector: "td:nth-child(2)"
+    date_selector: "td:nth-child(1)"
+    link_selector: "td:nth-child(2) a"
+    document_types:
+      - Resolución
+      - Circular
+
+  - id: sfc_colombia
+    name: Superintendencia Financiera de Colombia
+    country: Colombia
+    regulator: Superintendencia Financiera de Colombia
+    enabled: true
+    scraper: sfc
+    base_url: https://www.superfinanciera.gov.co
+    paths:
+      - /jsp/loader.jsf?lServicio=PublicacionesInternet&lTipo=publicaciones&lFuncion=loadContenidoPublicacion&id=60950
+    document_types:
+      - Circular Externa
+      - Carta Circular
+      - Resolución
+
+  - id: camara_diputados_chile
+    name: Cámara de Diputados Chile
+    country: Chile
+    regulator: Cámara de Diputados
+    enabled: false
+    scraper: generic
+    base_url: https://www.camara.cl
+    list_url: https://www.camara.cl/legislacion/ProyectosDeLey/proyectos_ley.aspx
+    document_types:
+      - Proyecto de Ley
+      - Boletín
+
+  - id: congreso_nacional_chile
+    name: Congreso Nacional Chile
+    country: Chile
+    regulator: Congreso Nacional
+    enabled: false
+    scraper: generic
+    base_url: https://www.bcn.cl
+    document_types:
+      - Ley
+      - Proyecto de Ley
+
+scraping:
+  request_timeout: 30
+  retry_attempts: 3
+  retry_delay: 5
+  user_agent: "Mozilla/5.0 (compatible; RegulatoryRadar/1.0)"
+  rate_limit_delay: 2
+
+ai:
+  model: claude-sonnet-4-6
+  max_tokens: 2000
+  batch_size: 5
