@@ -1,10 +1,10 @@
-/**
- * Dashboard view – KPIs + Charts
- */
 const Dashboard = (() => {
   let _charts = {};
 
-  const PALETTE = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#84cc16'];
+  const BLUE_PALETTE = [
+    '#1e5fbc','#2d7ae8','#4a9df5','#6db4f7','#90c9f9',
+    '#b3dcfb','#c6387a','#e05c96','#8b5cf6','#a78bfa',
+  ];
 
   function render() {
     const s = Data.stats();
@@ -14,14 +14,13 @@ const Dashboard = (() => {
 
   function _renderKPIs(s) {
     const grid = document.getElementById('kpi-grid');
-    const today = new Date().toISOString().slice(0,10);
     const kpis = [
-      { label: 'Total detectadas', value: s.total,         sub: 'normas',                      cls: '' },
-      { label: '🆕 Nuevas',        value: s.nuevo,         sub: 'pendientes revisión',          cls: '' },
-      { label: '✅ Aplicables',    value: s.applicable,    sub: 'requieren seguimiento',        cls: 'verde' },
-      { label: '🔴 Críticas',      value: s.critical,      sub: 'riesgo crítico',               cls: 'critico' },
-      { label: '💀 Vencidas',      value: s.expired,       sub: 'fuera de plazo',               cls: 'alto' },
-      { label: '⏰ Por vencer',    value: s.expiring_soon, sub: 'próximos 7 días',              cls: s.expiring_soon > 0 ? 'alto' : '' },
+      { label: 'Total normativas',  value: s.total,        sub: 'en el repositorio',      cls: 'azul' },
+      { label: 'Nuevas',            value: s.nuevo,        sub: 'pendientes de revision',  cls: '' },
+      { label: 'Aplicables',        value: s.applicable,   sub: 'requieren seguimiento',   cls: 'verde' },
+      { label: 'En revision',       value: s.en_revision,  sub: 'consultas publicas',      cls: '' },
+      { label: 'Riesgo critico',    value: s.critical,     sub: 'score >= 81',             cls: 'critico' },
+      { label: 'Por vencer',        value: s.expiring_soon, sub: 'proximos 7 dias',        cls: s.expiring_soon > 0 ? 'alto' : '' },
     ];
     grid.innerHTML = kpis.map(k => `
       <div class="kpi-card ${k.cls}">
@@ -34,45 +33,71 @@ const Dashboard = (() => {
   function _renderCharts(s) {
     _destroyAll();
 
-    // Country pie
-    const cc = document.getElementById('chart-country').getContext('2d');
-    _charts.country = new Chart(cc, {
-      type: 'doughnut',
-      data: {
-        labels: Object.keys(s.byCountry),
-        datasets: [{ data: Object.values(s.byCountry), backgroundColor: PALETTE, borderWidth: 2 }],
-      },
-      options: { plugins: { legend: { position: 'bottom' } }, cutout: '55%' },
-    });
-
-    // Regulator bar
+    // Regulator bar (horizontal)
+    const regEntries = Object.entries(s.byRegulator).slice(0, 9);
     const rc = document.getElementById('chart-regulator').getContext('2d');
-    const regEntries = Object.entries(s.byRegulator);
     _charts.regulator = new Chart(rc, {
       type: 'bar',
       data: {
-        labels: regEntries.map(([k]) => k.length > 28 ? k.slice(0,26)+'…' : k),
-        datasets: [{ data: regEntries.map(([,v]) => v), backgroundColor: '#3b82f6', borderRadius: 4 }],
+        labels: regEntries.map(([k]) => k.length > 30 ? k.slice(0, 28) + '…' : k),
+        datasets: [{
+          data: regEntries.map(([, v]) => v),
+          backgroundColor: BLUE_PALETTE,
+          borderRadius: 4,
+          borderSkipped: false,
+        }],
       },
       options: {
         indexAxis: 'y',
         plugins: { legend: { display: false } },
-        scales: { x: { beginAtZero: true, ticks: { precision: 0 } }, y: { ticks: { font: { size: 11 } } } },
+        scales: {
+          x: { beginAtZero: true, ticks: { precision: 0, color: '#5a6880' }, grid: { color: '#eef1f5' } },
+          y: { ticks: { font: { size: 11 }, color: '#5a6880' }, grid: { display: false } },
+        },
       },
     });
 
-    // Category bar
-    const catEntries = Object.entries(s.byCategory).sort((a,b) => b[1]-a[1]);
-    const catc = document.getElementById('chart-category').getContext('2d');
-    _charts.category = new Chart(catc, {
-      type: 'bar',
+    // Category doughnut
+    const catEntries = Object.entries(s.byCategory).sort((a, b) => b[1] - a[1]);
+    const cc = document.getElementById('chart-category').getContext('2d');
+    _charts.category = new Chart(cc, {
+      type: 'doughnut',
       data: {
         labels: catEntries.map(([k]) => k),
-        datasets: [{ data: catEntries.map(([,v]) => v), backgroundColor: PALETTE, borderRadius: 4 }],
+        datasets: [{
+          data: catEntries.map(([, v]) => v),
+          backgroundColor: BLUE_PALETTE,
+          borderWidth: 2,
+          borderColor: '#fff',
+        }],
+      },
+      options: {
+        cutout: '58%',
+        plugins: {
+          legend: { position: 'right', labels: { font: { size: 11 }, color: '#5a6880', boxWidth: 12 } },
+        },
+      },
+    });
+
+    // Doc type bar (horizontal)
+    const dtEntries = Object.entries(s.byDocType).sort((a, b) => b[1] - a[1]);
+    const dc = document.getElementById('chart-doctype').getContext('2d');
+    _charts.doctype = new Chart(dc, {
+      type: 'bar',
+      data: {
+        labels: dtEntries.map(([k]) => k),
+        datasets: [{
+          data: dtEntries.map(([, v]) => v),
+          backgroundColor: '#2d7ae8',
+          borderRadius: 4,
+        }],
       },
       options: {
         plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
+        scales: {
+          y: { beginAtZero: true, ticks: { precision: 0, color: '#5a6880' }, grid: { color: '#eef1f5' } },
+          x: { ticks: { color: '#5a6880', font: { size: 11 } }, grid: { display: false } },
+        },
       },
     });
   }

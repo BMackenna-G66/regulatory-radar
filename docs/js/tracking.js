@@ -1,6 +1,3 @@
-/**
- * Tracking – persists follow-up data in localStorage
- */
 const Tracking = (() => {
   const KEY = 'rr_tracking_v1';
 
@@ -10,9 +7,7 @@ const Tracking = (() => {
   }
   function _save(data) { localStorage.setItem(KEY, JSON.stringify(data)); }
 
-  function get(itemId) {
-    return _load()[String(itemId)] || null;
-  }
+  function get(itemId) { return _load()[String(itemId)] || null; }
 
   function set(itemId, record) {
     const data = _load();
@@ -20,20 +15,18 @@ const Tracking = (() => {
     _save(data);
   }
 
-  function all() {
-    const store = _load();
-    return Object.values(store);
-  }
+  function all() { return Object.values(_load()); }
 
-  /* ── View: Kanban + Table ──────────────────────────────────────────────── */
   const STATUSES = [
-    { id: 'pendiente_revision', label: '⏳ Pendiente',         color: '#f59e0b' },
-    { id: 'asignado',           label: '👤 Asignado',          color: '#3b82f6' },
-    { id: 'en_implementacion',  label: '🔧 En implementación', color: '#8b5cf6' },
-    { id: 'bloqueado',          label: '🚫 Bloqueado',         color: '#ef4444' },
-    { id: 'implementado',       label: '✅ Implementado',      color: '#22c55e' },
-    { id: 'cerrado',            label: '🔒 Cerrado',           color: '#94a3b8' },
+    { id: 'pendiente_revision', label: 'Pendiente',        color: '#c87a00' },
+    { id: 'asignado',           label: 'Asignado',         color: '#1e5fbc' },
+    { id: 'en_implementacion',  label: 'En implementacion',color: '#6d28d9' },
+    { id: 'bloqueado',          label: 'Bloqueado',        color: '#c0392b' },
+    { id: 'implementado',       label: 'Implementado',     color: '#1a7a3e' },
+    { id: 'cerrado',            label: 'Cerrado',          color: '#5a6880' },
   ];
+
+  const PROGRESS_LABEL = Object.fromEntries(STATUSES.map(s => [s.id, s.label]));
 
   let _view = 'kanban';
 
@@ -54,17 +47,15 @@ const Tracking = (() => {
   function renderKanban() {
     const rows  = Data.enriched();
     const board = document.getElementById('tracking-kanban');
-    const today = new Date().toISOString().slice(0,10);
-    const in7d  = new Date(Date.now()+7*864e5).toISOString().slice(0,10);
-
-    if (!rows.length) {
-      board.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>Sin normas registradas</p></div>';
-      return;
-    }
+    const today = new Date().toISOString().slice(0, 10);
+    const in7d  = new Date(Date.now() + 7 * 864e5).toISOString().slice(0, 10);
 
     const tracked = rows.filter(r => get(r.id));
     if (!tracked.length) {
-      board.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>No hay seguimiento registrado aún.<br/>Ve a <strong>Detalle normativa</strong> → pestaña <strong>Seguimiento</strong>.</p></div>';
+      board.innerHTML = `<div class="empty-state">
+        <div class="icon">[ ]</div>
+        <p>Sin seguimiento registrado. Ingrese a <strong>Detalle normativa</strong> para registrar el seguimiento de cada norma.</p>
+      </div>`;
       return;
     }
 
@@ -76,55 +67,62 @@ const Tracking = (() => {
         });
         const cardsHtml = cards.map(r => {
           const t = get(r.id) || {};
-          const riskDot = { crítico:'🔴', alto:'🟠', medio:'🟡', bajo:'🟢' }[r.risk_level] || '⚪';
-          let dueBadge = '';
+          const riskClass = r.risk_level || 'bajo';
+          let dueLine = '';
           if (t.due_date) {
-            const cls = t.due_date < today ? 'color:var(--critico)' : (t.due_date <= in7d ? 'color:var(--alto)' : 'color:var(--bajo)');
-            dueBadge = `<span style="${cls}">📅 ${t.due_date}</span>`;
+            const cls = t.due_date < today ? 'due-overdue' : (t.due_date <= in7d ? 'due-soon' : 'due-ok');
+            dueLine = `<span class="${cls}">${t.due_date}</span>`;
           }
           return `<div class="kanban-card" onclick="App.navigateDetail(${r.id})">
-            <div class="card-title">${riskDot} ${(r.title||'').substring(0,70)}…</div>
+            <div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:6px;">
+              <div class="risk-dot ${riskClass}" style="margin-top:4px;flex-shrink:0;"></div>
+              <div class="card-title">${(r.title || '').substring(0, 72)}…</div>
+            </div>
             <div class="card-meta">
-              <span>📍 ${t.responsible_area||'—'}</span>
-              <span>👤 ${t.owner||'—'}</span>
-              ${dueBadge}
+              <span>${t.responsible_area || '—'}</span>
+              <span>${t.owner || '—'}</span>
+              ${dueLine}
             </div>
           </div>`;
         }).join('');
+
         return `<div class="kanban-col">
           <div class="kanban-col-header">
-            <span style="color:${s.color}">${s.label}</span>
+            <span style="color:${s.color};">${s.label}</span>
             <span class="count">${cards.length}</span>
           </div>
-          ${cardsHtml || '<div style="font-size:.75rem;color:#94a3b8;padding:8px 4px;">Sin normas</div>'}
+          ${cardsHtml || '<div style="font-size:.72rem;color:#94a3b8;padding:6px 4px;">Sin normas</div>'}
         </div>`;
       }).join('') + '</div>';
   }
 
   function renderTable() {
-    const tbody = document.getElementById('tracking-tbody');
-    const rows  = Data.enriched();
+    const tbody  = document.getElementById('tracking-tbody');
+    const rows   = Data.enriched();
     const tracked = rows.filter(r => get(r.id));
-    const PROGRESS_LABEL = {
-      pendiente_revision:'⏳ Pendiente', asignado:'👤 Asignado',
-      en_implementacion:'🔧 En impl.', bloqueado:'🚫 Bloqueado',
-      implementado:'✅ Implementado', cerrado:'🔒 Cerrado',
-    };
+
     if (!tracked.length) {
       tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#94a3b8;padding:32px;">Sin seguimiento registrado</td></tr>';
       return;
     }
     tbody.innerHTML = tracked.map(r => {
       const t = get(r.id) || {};
+      const today = new Date().toISOString().slice(0, 10);
+      const in7d  = new Date(Date.now() + 7 * 864e5).toISOString().slice(0, 10);
+      let dueTd = t.due_date || '—';
+      if (t.due_date) {
+        const cls = t.due_date < today ? 'due-overdue' : (t.due_date <= in7d ? 'due-soon' : '');
+        dueTd = `<span class="${cls}">${t.due_date}</span>`;
+      }
       return `<tr onclick="App.navigateDetail(${r.id})">
         <td style="max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${r.title}">${r.title}</td>
-        <td>${r.country}</td>
-        <td>${t.responsible_area||'—'}</td>
-        <td>${t.owner||'—'}</td>
-        <td>${t.due_date||'—'}</td>
-        <td><span class="badge badge-${t.impact_level||'bajo'}">${t.impact_level||'—'}</span></td>
-        <td>${PROGRESS_LABEL[t.progress_status]||t.progress_status||'—'}</td>
-        <td>${r.risk_score ?? '—'}</td>
+        <td style="font-size:.78rem;">${r.regulator}</td>
+        <td>${t.responsible_area || '—'}</td>
+        <td>${t.owner || '—'}</td>
+        <td>${dueTd}</td>
+        <td><span class="badge badge-${t.impact_level || 'bajo'}">${t.impact_level || '—'}</span></td>
+        <td>${PROGRESS_LABEL[t.progress_status] || t.progress_status || '—'}</td>
+        <td style="font-weight:600;">${r.risk_score ?? '—'}</td>
       </tr>`;
     }).join('');
   }

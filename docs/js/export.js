@@ -15,9 +15,9 @@ const Export = (() => {
   };
 
   function _filtered() {
-    const country = document.getElementById('exp-country')?.value || '';
-    const status  = document.getElementById('exp-status')?.value  || '';
-    return Data.enriched({ country: country || undefined, status: status || undefined });
+    const status   = document.getElementById('exp-status')?.value    || '';
+    const category = document.getElementById('exp-category')?.value  || '';
+    return Data.enriched({ status: status || undefined, category: category || undefined });
   }
 
   function updatePreview() {
@@ -69,7 +69,7 @@ const Export = (() => {
 
   // Live preview update on filter change
   document.addEventListener('change', e => {
-    if (e.target.id === 'exp-country' || e.target.id === 'exp-status') updatePreview();
+    if (e.target.id === 'exp-status' || e.target.id === 'exp-category') updatePreview();
   });
 
   return { downloadExcel, updatePreview };
