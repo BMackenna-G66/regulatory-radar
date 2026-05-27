@@ -706,5 +706,77 @@
     "content_hash": "50a087c4b895966f",
     "detected_at": "2026-05-26T16:46:33",
     "status": "en_revision"
+  },
+  {
+    "country": "Chile",
+    "regulator": "CMF",
+    "document_type": "Norma de Carácter General",
+    "title": "NCG N°457 – Modifica normas sobre prevención de lavado de activos y financiamiento del terrorismo",
+    "publication_date": "2024-11-15",
+    "source_url": "https://www.cmfchile.cl/portal/principal/613/",
+    "content_hash": "28dac656f0896137",
+    "detected_at": "2026-05-27T12:24:14",
+    "status": "nuevo",
+    "id": 60
+  },
+  {
+    "country": "Chile",
+    "regulator": "CMF",
+    "document_type": "Circular",
+    "title": "Circular N°2.396 – Requisitos mínimos de ciberseguridad y multas por incumplimiento",
+    "publication_date": "2024-10-01",
+    "source_url": "https://www.cmfchile.cl/portal/principal/605/",
+    "content_hash": "c9099e4fe186f34a",
+    "detected_at": "2026-05-27T12:24:14",
+    "status": "nuevo",
+    "id": 61
+  },
+  {
+    "country": "Chile",
+    "regulator": "Banco Central de Chile",
+    "document_type": "Capítulo",
+    "title": "Capítulo III.F – Prevención de LA/FT en el sistema de pagos",
+    "publication_date": "2024-06-10",
+    "source_url": "https://www.bcentral.cl/web/banco-central/normativa/",
+    "content_hash": "29af05df1e8bcaf5",
+    "detected_at": "2026-05-27T12:24:15",
+    "status": "nuevo",
+    "id": 62
+  },
+  {
+    "country": "Chile",
+    "regulator": "Diario Oficial",
+    "document_type": "Ley",
+    "title": "Ley N°21.595 – Modifica la Ley N°19.913 sobre obligaciones para proveedores de activos virtuales",
+    "publication_date": "2024-09-01",
+    "source_url": "https://www.diariooficial.interior.gob.cl/",
+    "content_hash": "53c1de9343d958a3",
+    "detected_at": "2026-05-27T12:24:17",
+    "status": "nuevo",
+    "id": 63
+  },
+  {
+    "country": "Colombia",
+    "regulator": "Superintendencia Financiera de Colombia",
+    "document_type": "Circular Externa",
+    "title": "Circular Externa 027 de 2024 – Actualiza instrucciones sobre SARLAFT",
+    "publication_date": "2024-10-15",
+    "source_url": "https://www.superfinanciera.gov.co/",
+    "content_hash": "2062b14b39465168",
+    "detected_at": "2026-05-27T12:24:18",
+    "status": "nuevo",
+    "id": 64
+  },
+  {
+    "country": "Colombia",
+    "regulator": "Superintendencia Financiera de Colombia",
+    "document_type": "Carta Circular",
+    "title": "Carta Circular 035 de 2024 – Obligaciones de reporte a la UIAF y plazos máximos",
+    "publication_date": "2024-11-01",
+    "source_url": "https://www.superfinanciera.gov.co/",
+    "content_hash": "bafadec664d58dbb",
+    "detected_at": "2026-05-27T12:24:18",
+    "status": "nuevo",
+    "id": 65
   }
 ]
