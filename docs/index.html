@@ -17,25 +17,40 @@
     <span>Radar Regulatorio</span>
   </div>
   <nav>
+    <div class="nav-section">MONITOREO</div>
     <a href="#dashboard" class="nav-link active" data-page="dashboard">
       <div class="nav-dot">D</div> Dashboard
     </a>
     <a href="#inbox" class="nav-link" data-page="inbox">
-      <div class="nav-dot">B</div> Bandeja de revisión
+      <div class="nav-dot">N</div> Normativas
     </a>
-    <a href="#detail" class="nav-link" data-page="detail">
-      <div class="nav-dot">N</div> Detalle normativa
+    <a href="#categories" class="nav-link" data-page="categories">
+      <div class="nav-dot">C</div> Categorias
     </a>
+    <a href="#sources" class="nav-link" data-page="sources">
+      <div class="nav-dot">F</div> Fuentes
+    </a>
+    <div class="nav-section">GESTION</div>
     <a href="#tracking" class="nav-link" data-page="tracking">
       <div class="nav-dot">S</div> Seguimiento
+    </a>
+    <a href="#changes" class="nav-link" data-page="changes">
+      <div class="nav-dot">RC</div> Reg. Cambios
+    </a>
+    <a href="#alerts" class="nav-link" data-page="alerts">
+      <div class="nav-dot">A</div> Alertas
+    </a>
+    <div class="nav-section">REPORTES</div>
+    <a href="#report" class="nav-link" data-page="report">
+      <div class="nav-dot">R</div> Reporte Comites
     </a>
     <a href="#export" class="nav-link" data-page="export">
       <div class="nav-dot">E</div> Exportar
     </a>
   </nav>
   <div class="sidebar-footer">
-    G81 SPA — Global Card S.A.<br/>
-    Compliance · Radar Regulatorio
+    Global Card S.A. · Global 81 SpA<br/>
+    Legal &amp; Compliance Chile
   </div>
 </aside>
 
@@ -52,153 +67,153 @@
   <main id="content">
     <div class="loader" id="global-loader"><div class="spinner"></div></div>
 
-    <!-- DASHBOARD ─────────────────────────────────────────────────────── -->
+    <!-- DASHBOARD ───────────────────────────────────────────────────────── -->
     <div id="page-dashboard" class="page" style="display:none;">
       <div class="page-header"><h1>Dashboard Ejecutivo</h1></div>
-      <div class="kpi-grid" id="kpi-grid"></div>
-      <div class="charts-row">
+      <div id="kpi-grid" class="kpi-grid"></div>
+      <div class="dashboard-charts">
         <div class="chart-card">
-          <h3>Distribución por Regulador</h3>
-          <canvas id="chart-regulator" height="240"></canvas>
+          <h3>Normativas por Regulador</h3>
+          <canvas id="chart-regulator" height="220"></canvas>
         </div>
         <div class="chart-card">
-          <h3>Normas por Categoria Tematica</h3>
-          <canvas id="chart-category" height="240"></canvas>
+          <h3>Distribucion por Categoria</h3>
+          <canvas id="chart-category" height="220"></canvas>
         </div>
-      </div>
-      <div class="chart-card">
-        <h3>Distribucion por Tipo de Documento</h3>
-        <canvas id="chart-doctype" height="110"></canvas>
+        <div class="chart-card">
+          <h3>Estado de Implementacion</h3>
+          <canvas id="chart-impl-status" height="220"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>Por Entidad Aplicable</h3>
+          <canvas id="chart-entity" height="220"></canvas>
+        </div>
       </div>
     </div>
 
-    <!-- BANDEJA ────────────────────────────────────────────────────────── -->
+    <!-- NORMATIVAS (INBOX) ──────────────────────────────────────────────── -->
     <div id="page-inbox" class="page" style="display:none;">
       <div class="page-header">
-        <h1>Bandeja de Revision</h1>
-        <span id="inbox-count" style="font-size:.82rem;color:#5a6880;"></span>
+        <h1>Normativas <span id="inbox-count" class="badge badge-nuevo" style="font-size:.75rem;"></span></h1>
       </div>
-      <div class="table-card">
-        <div class="table-toolbar">
-          <input type="text" id="filter-search" placeholder="Buscar por titulo..." oninput="Inbox.render()" />
-          <select id="filter-regulator" onchange="Inbox.render()">
-            <option value="">Todos los reguladores</option>
-          </select>
-          <select id="filter-doctype" onchange="Inbox.render()">
-            <option value="">Todos los tipos</option>
-          </select>
-          <select id="filter-status" onchange="Inbox.render()">
-            <option value="">Todos los estados</option>
-            <option value="nuevo">Nuevo</option>
-            <option value="en_revision">En revision</option>
-            <option value="aplica_requiere_accion">Aplica — Requiere accion</option>
-            <option value="aplica_informativo">Aplica — Informativo</option>
-            <option value="no_aplica">No aplica</option>
-            <option value="implementado">Implementado</option>
-            <option value="vencido">Vencido</option>
-          </select>
-          <select id="filter-risk" onchange="Inbox.render()">
-            <option value="">Todos los niveles</option>
-            <option value="crítico">Critico</option>
-            <option value="alto">Alto</option>
-            <option value="medio">Medio</option>
-            <option value="bajo">Bajo</option>
-          </select>
-        </div>
-        <div style="overflow-x:auto;">
-          <table>
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Regulador</th>
-                <th>Tipo</th>
-                <th>Titulo</th>
-                <th>Score</th>
-                <th>Nivel</th>
-                <th>Categoria</th>
-                <th>Estado</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="inbox-tbody"></tbody>
-          </table>
-        </div>
+      <div class="filter-bar">
+        <input  id="filter-search"    class="filter-input" type="text"   placeholder="Buscar por titulo..." />
+        <select id="filter-entity"    class="filter-select">
+          <option value="">Todas las entidades</option>
+          <option value="Global Card S.A.">Global Card S.A.</option>
+          <option value="Global 81 SpA">Global 81 SpA</option>
+          <option value="Ambas">Ambas</option>
+        </select>
+        <select id="filter-regulator" class="filter-select"><option value="">Todos los reguladores</option></select>
+        <select id="filter-doctype"   class="filter-select"><option value="">Todos los tipos</option></select>
+        <select id="filter-risk"      class="filter-select">
+          <option value="">Todos los riesgos</option>
+          <option value="crítico">Critico (ALTO)</option>
+          <option value="alto">Alto (MEDIO)</option>
+          <option value="bajo">Bajo</option>
+        </select>
+        <select id="filter-impl"      class="filter-select">
+          <option value="">Todos los estados</option>
+          <option value="Implementado">Implementado</option>
+          <option value="En Proceso">En Proceso</option>
+          <option value="Pendiente">Pendiente</option>
+        </select>
       </div>
+      <table class="data-table" id="inbox-table">
+        <thead>
+          <tr>
+            <th style="width:90px;">Fecha</th>
+            <th style="width:110px;">Regulador</th>
+            <th style="width:80px;">Tipo</th>
+            <th>Nombre</th>
+            <th style="width:70px;">Riesgo</th>
+            <th style="width:90px;">Entidad</th>
+            <th style="width:100px;">Estado Impl.</th>
+            <th style="width:50px;"></th>
+          </tr>
+        </thead>
+        <tbody id="inbox-tbody"></tbody>
+      </table>
     </div>
 
-    <!-- DETALLE ────────────────────────────────────────────────────────── -->
+    <!-- DETAIL ──────────────────────────────────────────────────────────── -->
     <div id="page-detail" class="page" style="display:none;">
       <div class="page-header">
-        <button class="btn btn-secondary btn-sm" onclick="App.navigate('inbox')">Volver a bandeja</button>
-        <div id="detail-status-badge"></div>
+        <div>
+          <h1 id="detail-title" style="font-size:1.1rem;"></h1>
+          <div id="detail-status-badge" style="margin-top:6px;"></div>
+        </div>
+        <button class="btn btn-outline-blue btn-sm" onclick="App.navigate('inbox')">Volver</button>
       </div>
-      <h1 id="detail-title" style="font-size:1.15rem;font-weight:700;margin-bottom:18px;line-height:1.4;color:var(--text);"></h1>
-      <div class="meta-row" id="detail-meta"></div>
 
-      <div class="tabs">
-        <div class="tab active" data-tab="analysis">Analisis IA</div>
-        <div class="tab" data-tab="original">Documento original</div>
-        <div class="tab" data-tab="tracking-form">Seguimiento</div>
+      <div id="detail-meta" class="meta-grid"></div>
+
+      <!-- 5D Impact Matrix -->
+      <div class="impact-matrix-wrap detail-card">
+        <h3 style="margin-bottom:12px;">Matriz de Impacto 5 Dimensiones</h3>
+        <div id="detail-impact-matrix" class="impact-matrix"></div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" style="margin-top:20px;">
+        <button class="tab active" data-tab="analysis">Analisis</button>
+        <button class="tab" data-tab="obligations">Obligaciones</button>
+        <button class="tab" data-tab="original">Ficha Completa</button>
+        <button class="tab" data-tab="tracking">Seguimiento</button>
       </div>
 
       <div id="tab-analysis" class="tab-pane active">
-        <div class="kpi-grid" id="detail-kpis" style="margin-bottom:20px;"></div>
-        <div class="detail-grid" id="detail-analysis-grid"></div>
+        <div id="detail-kpis" class="kpi-grid" style="margin:16px 0 20px;"></div>
+        <div id="detail-analysis-grid" class="two-col-grid"></div>
+      </div>
+
+      <div id="tab-obligations" class="tab-pane">
+        <div id="detail-obligations-content"></div>
       </div>
 
       <div id="tab-original" class="tab-pane">
-        <div class="detail-card" style="margin-bottom:14px;">
-          <h3>Enlace al documento</h3>
-          <p><a id="detail-source-link" href="#" target="_blank" style="color:var(--blue);word-break:break-all;"></a></p>
+        <div class="detail-card" style="margin-top:16px;">
+          <h3>Fuente oficial</h3>
+          <a id="detail-source-link" href="#" target="_blank" rel="noopener" style="word-break:break-all;color:var(--blue);"></a>
         </div>
-        <div class="detail-card">
-          <h3>Informacion del registro</h3>
-          <div id="detail-original-info" style="font-size:.84rem;line-height:1.9;"></div>
-        </div>
+        <div id="detail-original-info" style="margin-top:14px;"></div>
       </div>
 
-      <div id="tab-tracking-form" class="tab-pane">
-        <div class="detail-card" style="max-width:720px;">
-          <h3 style="margin-bottom:18px;">Registro de seguimiento</h3>
-          <form id="tracking-form" onsubmit="TrackingForm.save(event)">
-            <div class="form-row">
+      <div id="tab-tracking" class="tab-pane">
+        <form id="tracking-form" onsubmit="TrackingForm.save(event)" style="margin-top:16px;">
+          <div class="two-col-grid">
+            <div>
               <div class="form-group">
                 <label>Aplica</label>
-                <select id="tf-applies" required>
-                  <option value="sí">Si</option>
-                  <option value="no">No</option>
+                <select id="tf-applies">
+                  <option value="Si">Si</option>
+                  <option value="No">No</option>
                   <option value="revisar">Revisar</option>
                 </select>
               </div>
               <div class="form-group">
                 <label>Area responsable</label>
-                <select id="tf-area">
-                  <option>Compliance</option><option>Legal</option><option>Fraude</option>
-                  <option>Operaciones</option><option>Producto</option><option>Finanzas</option>
-                  <option>Tecnologia</option><option>Data</option><option>CX</option>
-                </select>
+                <select id="tf-area"></select>
               </div>
-            </div>
-            <div class="form-row">
               <div class="form-group">
                 <label>Encargado</label>
-                <input type="text" id="tf-owner" placeholder="Nombre del responsable" />
+                <input id="tf-owner" type="text" placeholder="Nombre del responsable" />
               </div>
               <div class="form-group">
                 <label>Fecha limite</label>
-                <input type="date" id="tf-due-date" />
+                <input id="tf-due-date" type="date" />
               </div>
-            </div>
-            <div class="form-row">
               <div class="form-group">
                 <label>Nivel de impacto</label>
                 <select id="tf-impact">
-                  <option value="bajo">Bajo</option>
+                  <option value="critico">Critico</option>
+                  <option value="alto">Alto</option>
                   <option value="medio">Medio</option>
-                  <option value="alto" selected>Alto</option>
-                  <option value="crítico">Critico</option>
+                  <option value="bajo">Bajo</option>
                 </select>
               </div>
+            </div>
+            <div>
               <div class="form-group">
                 <label>Estado de avance</label>
                 <select id="tf-progress">
@@ -210,103 +225,378 @@
                   <option value="cerrado">Cerrado</option>
                 </select>
               </div>
+              <div class="form-group">
+                <label>Accion requerida</label>
+                <textarea id="tf-action" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Plan de accion</label>
+                <textarea id="tf-plan" rows="3"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Comentarios</label>
+                <textarea id="tf-comments" rows="2"></textarea>
+              </div>
+              <div class="form-group">
+                <label>URL evidencia</label>
+                <input id="tf-evidence" type="url" placeholder="https://..." />
+              </div>
             </div>
-            <div class="form-group">
-              <label>Accion requerida</label>
-              <textarea id="tf-action" rows="2"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Guardar seguimiento</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- CATEGORIAS ──────────────────────────────────────────────────────── -->
+    <div id="page-categories" class="page" style="display:none;">
+      <div class="page-header">
+        <h1>Categorias Normativas</h1>
+        <span style="font-size:.8rem;color:#5a6880;">20 categorias · Normograma Chile v1.0</span>
+      </div>
+      <div id="categories-grid" class="categories-grid"></div>
+    </div>
+
+    <!-- FUENTES ─────────────────────────────────────────────────────────── -->
+    <div id="page-sources" class="page" style="display:none;">
+      <div class="page-header">
+        <h1>Mapa de Fuentes Regulatorias</h1>
+        <span style="font-size:.8rem;color:#5a6880;">GCCO-FUE-002-CHL v1.0</span>
+      </div>
+      <div id="sources-kpis" class="kpi-grid" style="margin-bottom:20px;"></div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:30px;">N°</th>
+            <th>Fuente</th>
+            <th style="width:90px;">Frecuencia</th>
+            <th style="width:110px;">Area Resp.</th>
+            <th style="width:70px;">Criticidad</th>
+            <th>Utilidad Practica</th>
+          </tr>
+        </thead>
+        <tbody id="sources-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- SEGUIMIENTO ─────────────────────────────────────────────────────── -->
+    <div id="page-tracking" class="page" style="display:none;">
+      <div class="page-header">
+        <h1>Seguimiento de Implementacion</h1>
+        <div style="display:flex;gap:8px;">
+          <button id="btn-kanban" class="btn btn-primary btn-sm" onclick="Tracking.setView('kanban')">Kanban</button>
+          <button id="btn-table"  class="btn btn-secondary btn-sm" onclick="Tracking.setView('table')">Tabla</button>
+        </div>
+      </div>
+      <div id="tracking-kanban"></div>
+      <div id="tracking-table" style="display:none;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Normativa</th>
+              <th>Regulador</th>
+              <th>Area</th>
+              <th>Encargado</th>
+              <th>Fecha Limite</th>
+              <th>Impacto</th>
+              <th>Estado</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody id="tracking-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- REGISTRO DE CAMBIOS ─────────────────────────────────────────────── -->
+    <div id="page-changes" class="page" style="display:none;">
+      <div class="page-header">
+        <h1>Registro de Cambios Normativos</h1>
+        <button class="btn btn-primary btn-sm" onclick="Changes.openNew()">+ Nuevo cambio</button>
+      </div>
+      <div id="changes-kpis" class="kpi-grid" style="margin-bottom:20px;"></div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:90px;">Deteccion</th>
+            <th style="width:70px;">Fuente</th>
+            <th>Norma / Proyecto</th>
+            <th style="width:90px;">Tipo</th>
+            <th style="width:60px;">Entidad</th>
+            <th style="width:60px;">Impacto</th>
+            <th style="width:90px;">Fecha Limite</th>
+            <th style="width:90px;">Estado</th>
+            <th style="width:50px;"></th>
+          </tr>
+        </thead>
+        <tbody id="changes-tbody"></tbody>
+      </table>
+
+      <!-- Change modal -->
+      <div id="change-modal" class="modal" style="display:none;">
+        <div class="modal-backdrop" onclick="Changes.closeModal()"></div>
+        <div class="modal-box">
+          <div class="modal-header">
+            <h3 id="change-modal-title">Nuevo Cambio Normativo</h3>
+            <button class="btn btn-secondary btn-sm" onclick="Changes.closeModal()">Cerrar</button>
+          </div>
+          <form id="change-form" onsubmit="Changes.saveChange(event)">
+            <input type="hidden" id="cf-id" />
+            <div class="two-col-grid">
+              <div>
+                <div class="form-group">
+                  <label>Fecha de deteccion</label>
+                  <input id="cf-date" type="date" required />
+                </div>
+                <div class="form-group">
+                  <label>Fuente</label>
+                  <select id="cf-source">
+                    <option>CMF</option><option>UAF</option><option>BCCh</option>
+                    <option>Diario Oficial</option><option>Congreso</option>
+                    <option>ANCI</option><option>SERNAC</option><option>OFAC</option>
+                    <option>GAFI/FATF</option><option>GAFILAT</option><option>Otro</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Norma / Proyecto</label>
+                  <input id="cf-norm" type="text" required placeholder="Ej: NCG N°502" />
+                </div>
+                <div class="form-group">
+                  <label>Tipo de cambio</label>
+                  <select id="cf-type">
+                    <option>Norma Nueva</option>
+                    <option>Modificacion</option>
+                    <option>Derogacion</option>
+                    <option>Proyecto de Ley</option>
+                    <option>Consulta Publica</option>
+                    <option>Alerta OFAC</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Entidad aplicable</label>
+                  <select id="cf-entity">
+                    <option>Ambas</option>
+                    <option>Global Card S.A.</option>
+                    <option>Global 81 SpA</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Nivel de impacto</label>
+                  <select id="cf-impact">
+                    <option value="ALTO">ALTO</option>
+                    <option value="MEDIO">MEDIO</option>
+                    <option value="BAJO">BAJO</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <div class="form-group">
+                  <label>Descripcion del cambio</label>
+                  <textarea id="cf-description" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Accion requerida</label>
+                  <textarea id="cf-action" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Responsable</label>
+                  <input id="cf-responsible" type="text" />
+                </div>
+                <div class="form-group">
+                  <label>Fecha limite</label>
+                  <input id="cf-deadline" type="date" />
+                </div>
+                <div class="form-group">
+                  <label>Estado</label>
+                  <select id="cf-status">
+                    <option>Pendiente</option>
+                    <option>En Proceso</option>
+                    <option>Implementado</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Observaciones</label>
+                  <textarea id="cf-observations" rows="2"></textarea>
+                </div>
+              </div>
             </div>
-            <div class="form-group">
-              <label>Plan de accion</label>
-              <textarea id="tf-plan" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-              <label>Comentarios</label>
-              <textarea id="tf-comments" rows="2"></textarea>
-            </div>
-            <div class="form-group">
-              <label>URL evidencia</label>
-              <input type="url" id="tf-evidence" placeholder="https://..." />
-            </div>
-            <button type="submit" class="btn btn-primary">Guardar seguimiento</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
           </form>
         </div>
       </div>
     </div>
 
-    <!-- SEGUIMIENTO ────────────────────────────────────────────────────── -->
-    <div id="page-tracking" class="page" style="display:none;">
+    <!-- ALERTAS ─────────────────────────────────────────────────────────── -->
+    <div id="page-alerts" class="page" style="display:none;">
       <div class="page-header">
-        <h1>Seguimiento Regulatorio</h1>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-primary btn-sm" onclick="Tracking.setView('kanban')" id="btn-kanban">Kanban</button>
-          <button class="btn btn-secondary btn-sm" onclick="Tracking.setView('table')" id="btn-table">Tabla</button>
-        </div>
+        <h1>Alertas Regulatorias</h1>
+        <button class="btn btn-primary btn-sm" onclick="Alerts.openNew()">+ Nueva alerta</button>
       </div>
-      <div id="tracking-kanban"></div>
-      <div id="tracking-table" style="display:none;">
-        <div class="table-card">
-          <div style="overflow-x:auto;">
-            <table>
-              <thead><tr>
-                <th>Normativa</th><th>Regulador</th><th>Area</th><th>Encargado</th>
-                <th>Fecha limite</th><th>Impacto</th><th>Estado avance</th><th>Score</th>
-              </tr></thead>
-              <tbody id="tracking-tbody"></tbody>
-            </table>
+      <div id="alerts-kpis" class="kpi-grid" style="margin-bottom:20px;"></div>
+      <div id="alerts-list"></div>
+
+      <!-- Alert modal -->
+      <div id="alert-modal" class="modal" style="display:none;">
+        <div class="modal-backdrop" onclick="Alerts.closeModal()"></div>
+        <div class="modal-box" style="max-width:680px;">
+          <div class="modal-header">
+            <h3 id="alert-modal-title">Nueva Alerta Regulatoria</h3>
+            <button class="btn btn-secondary btn-sm" onclick="Alerts.closeModal()">Cerrar</button>
           </div>
+          <form id="alert-form" onsubmit="Alerts.saveAlert(event)">
+            <input type="hidden" id="af-id" />
+            <div class="form-group">
+              <label>Nivel de alerta</label>
+              <select id="af-level">
+                <option value="urgente">URGENTE — Implementacion inmediata</option>
+                <option value="seguimiento">SEGUIMIENTO — 30-90 dias</option>
+                <option value="informativa">INFORMATIVA — Solo monitoreo</option>
+              </select>
+            </div>
+            <div class="two-col-grid">
+              <div class="form-group">
+                <label>Regulador</label>
+                <select id="af-source">
+                  <option>CMF</option><option>UAF</option><option>BCCh</option>
+                  <option>Diario Oficial</option><option>ANCI</option>
+                  <option>OFAC</option><option>GAFI</option><option>Otro</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Entidad afectada</label>
+                <select id="af-entity">
+                  <option>Ambas</option>
+                  <option>Global Card S.A.</option>
+                  <option>Global 81 SpA</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Que ocurrio (resumen en 1 oracion)</label>
+              <input id="af-title" type="text" required placeholder="Ej: CMF publico NCG N°502 sobre registro de PSP" />
+            </div>
+            <div class="form-group">
+              <label>Descripcion detallada</label>
+              <textarea id="af-description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Top 3 obligaciones / acciones requeridas</label>
+              <textarea id="af-obligations" rows="3" placeholder="1. ...\n2. ...\n3. ..."></textarea>
+            </div>
+            <div class="two-col-grid">
+              <div class="form-group">
+                <label>Fecha publicacion</label>
+                <input id="af-pub-date" type="date" />
+              </div>
+              <div class="form-group">
+                <label>Fecha limite interna</label>
+                <input id="af-deadline" type="date" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Estado</label>
+              <select id="af-status">
+                <option value="abierta">Abierta</option>
+                <option value="en_gestion">En gestion</option>
+                <option value="cerrada">Cerrada</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar alerta</button>
+          </form>
         </div>
       </div>
     </div>
 
-    <!-- EXPORTAR ───────────────────────────────────────────────────────── -->
+    <!-- REPORTE COMITES ─────────────────────────────────────────────────── -->
+    <div id="page-report" class="page" style="display:none;">
+      <div class="page-header">
+        <h1>Reporte Mensual — Comite de Compliance</h1>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span id="report-period" style="font-size:.82rem;color:#5a6880;font-weight:600;"></span>
+          <button class="btn btn-primary btn-sm" onclick="Report.downloadExcel()">Descargar Excel</button>
+        </div>
+      </div>
+      <div id="report-kpis" class="kpi-grid" style="margin-bottom:20px;"></div>
+      <h3 style="margin:0 0 12px;font-size:.9rem;color:#5a6880;font-weight:600;letter-spacing:.04em;">SEMAFORO DE CUMPLIMIENTO POR CATEGORIA</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Categoria Normativa</th>
+            <th style="width:70px;">Riesgo</th>
+            <th style="width:80px;">Estado</th>
+            <th style="width:60px;">Normas</th>
+            <th style="width:70px;">Brechas</th>
+            <th style="width:80px;">Pendientes</th>
+            <th style="width:100px;">Prox. Fecha</th>
+            <th>Comentario Ejecutivo</th>
+          </tr>
+        </thead>
+        <tbody id="report-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- EXPORTAR ────────────────────────────────────────────────────────── -->
     <div id="page-export" class="page" style="display:none;">
       <div class="page-header"><h1>Exportar Bitacora</h1></div>
-      <div class="detail-card" style="max-width:520px;">
+      <div class="detail-card" style="max-width:560px;">
         <h3 style="margin-bottom:14px;">Bitacora de Monitoreo Regulatorio</h3>
         <p style="margin-bottom:18px;font-size:.84rem;color:#5a6880;">
-          Genera el archivo Excel con todas las normas y su seguimiento en el formato estandar de Compliance.
+          Genera el archivo Excel con todas las normas en formato normograma estandar (28 columnas).
         </p>
         <div class="form-group">
-          <label>Filtrar por estado</label>
-          <select id="exp-status">
-            <option value="">Todos los estados</option>
-            <option value="nuevo">Nuevo</option>
-            <option value="en_revision">En revision</option>
-            <option value="aplica_requiere_accion">Aplica — Requiere accion</option>
-            <option value="aplica_informativo">Aplica — Informativo</option>
-            <option value="no_aplica">No aplica</option>
-            <option value="implementado">Implementado</option>
+          <label>Filtrar por entidad</label>
+          <select id="exp-entity">
+            <option value="">Todas las entidades</option>
+            <option value="Global Card S.A.">Global Card S.A.</option>
+            <option value="Global 81 SpA">Global 81 SpA</option>
+            <option value="Ambas">Ambas</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Filtrar por categoria</label>
-          <select id="exp-category">
-            <option value="">Todas las categorias</option>
-            <option>AML</option><option>KYC</option><option>Fraude</option>
-            <option>Sanciones</option><option>Datos personales</option>
-            <option>Proteccion al consumidor</option><option>Operacional</option>
-            <option>Tributario</option>
+          <label>Filtrar por estado implementacion</label>
+          <select id="exp-status">
+            <option value="">Todos los estados</option>
+            <option value="Implementado">Implementado</option>
+            <option value="En Proceso">En Proceso</option>
+            <option value="Pendiente">Pendiente</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Filtrar por riesgo consolidado</label>
+          <select id="exp-risk">
+            <option value="">Todos</option>
+            <option value="ALTO">ALTO</option>
+            <option value="MEDIO">MEDIO</option>
+            <option value="BAJO">BAJO</option>
           </select>
         </div>
         <div id="export-preview" style="margin:14px 0;font-size:.84rem;color:#5a6880;padding:10px;background:var(--surface-alt);border-radius:5px;"></div>
-        <button class="btn btn-primary" onclick="Export.downloadExcel()">Descargar Excel</button>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-primary" onclick="Export.downloadNormogram()">Normograma Excel (28 col.)</button>
+          <button class="btn btn-secondary" onclick="Export.downloadBitacora()">Bitacora Seguimiento</button>
+        </div>
       </div>
     </div>
 
   </main>
 </div>
 
-<!-- Toast container -->
+<!-- ── Toast ──────────────────────────────────────────────────────────────── -->
 <div id="toast-container"></div>
 
-<!-- Scripts -->
+<!-- ── Scripts ───────────────────────────────────────────────────────────── -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="js/data.js"></script>
+<script src="js/tracking.js"></script>
 <script src="js/dashboard.js"></script>
 <script src="js/inbox.js"></script>
 <script src="js/detail.js"></script>
-<script src="js/tracking.js"></script>
+<script src="js/categories.js"></script>
+<script src="js/sources.js"></script>
+<script src="js/changes.js"></script>
+<script src="js/alerts.js"></script>
+<script src="js/report.js"></script>
 <script src="js/export.js"></script>
 <script src="js/app.js"></script>
 </body>

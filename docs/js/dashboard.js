@@ -15,12 +15,12 @@ const Dashboard = (() => {
   function _renderKPIs(s) {
     const grid = document.getElementById('kpi-grid');
     const kpis = [
-      { label: 'Total normativas',  value: s.total,        sub: 'en el repositorio',      cls: 'azul' },
-      { label: 'Nuevas',            value: s.nuevo,        sub: 'pendientes de revision',  cls: '' },
-      { label: 'Aplicables',        value: s.applicable,   sub: 'requieren seguimiento',   cls: 'verde' },
-      { label: 'En revision',       value: s.en_revision,  sub: 'consultas publicas',      cls: '' },
-      { label: 'Riesgo critico',    value: s.critical,     sub: 'score >= 81',             cls: 'critico' },
-      { label: 'Por vencer',        value: s.expiring_soon, sub: 'proximos 7 dias',        cls: s.expiring_soon > 0 ? 'alto' : '' },
+      { label: 'Total normativas',    value: s.total,        sub: 'en el normograma',         cls: 'azul' },
+      { label: 'Riesgo ALTO',         value: s.critical,     sub: `${Math.round(s.critical/s.total*100)}% del total`, cls: 'critico' },
+      { label: 'Implementado',        value: s.implementado, sub: 'estado final',              cls: 'verde' },
+      { label: 'En proceso',          value: s.en_proceso,   sub: 'requieren seguimiento',     cls: '' },
+      { label: 'Nuevas / Pendientes', value: s.nuevo,        sub: 'pendientes de revision',    cls: '' },
+      { label: 'Por vencer',          value: s.expiring_soon,sub: 'proximos 7 dias',           cls: s.expiring_soon > 0 ? 'alto' : '' },
     ];
     grid.innerHTML = kpis.map(k => `
       <div class="kpi-card ${k.cls}">
@@ -33,19 +33,13 @@ const Dashboard = (() => {
   function _renderCharts(s) {
     _destroyAll();
 
-    // Regulator bar (horizontal)
-    const regEntries = Object.entries(s.byRegulator).slice(0, 9);
+    const regEntries = Object.entries(s.byRegulator).slice(0, 10);
     const rc = document.getElementById('chart-regulator').getContext('2d');
     _charts.regulator = new Chart(rc, {
       type: 'bar',
       data: {
-        labels: regEntries.map(([k]) => k.length > 30 ? k.slice(0, 28) + '…' : k),
-        datasets: [{
-          data: regEntries.map(([, v]) => v),
-          backgroundColor: BLUE_PALETTE,
-          borderRadius: 4,
-          borderSkipped: false,
-        }],
+        labels: regEntries.map(([k]) => k.length > 28 ? k.slice(0, 26) + '…' : k),
+        datasets: [{ data: regEntries.map(([, v]) => v), backgroundColor: BLUE_PALETTE, borderRadius: 4, borderSkipped: false }],
       },
       options: {
         indexAxis: 'y',
@@ -57,38 +51,30 @@ const Dashboard = (() => {
       },
     });
 
-    // Category doughnut
-    const catEntries = Object.entries(s.byCategory).sort((a, b) => b[1] - a[1]);
+    const catEntries = Object.entries(s.byCategory).sort((a, b) => b[1] - a[1]).slice(0, 10);
     const cc = document.getElementById('chart-category').getContext('2d');
     _charts.category = new Chart(cc, {
       type: 'doughnut',
       data: {
         labels: catEntries.map(([k]) => k),
-        datasets: [{
-          data: catEntries.map(([, v]) => v),
-          backgroundColor: BLUE_PALETTE,
-          borderWidth: 2,
-          borderColor: '#fff',
-        }],
+        datasets: [{ data: catEntries.map(([, v]) => v), backgroundColor: BLUE_PALETTE, borderWidth: 2, borderColor: '#fff' }],
       },
       options: {
-        cutout: '58%',
-        plugins: {
-          legend: { position: 'right', labels: { font: { size: 11 }, color: '#5a6880', boxWidth: 12 } },
-        },
+        cutout: '55%',
+        plugins: { legend: { position: 'right', labels: { font: { size: 10 }, color: '#5a6880', boxWidth: 10 } } },
       },
     });
 
-    // Doc type bar (horizontal)
-    const dtEntries = Object.entries(s.byDocType).sort((a, b) => b[1] - a[1]);
-    const dc = document.getElementById('chart-doctype').getContext('2d');
-    _charts.doctype = new Chart(dc, {
+    const implEntries = Object.entries(s.byImplStatus).sort((a, b) => b[1] - a[1]);
+    const IMPL_COLORS = { 'Implementado': '#1a7a3e', 'En Proceso': '#6d28d9', 'Pendiente': '#c87a00', 'N/A': '#94a3b8' };
+    const ic = document.getElementById('chart-impl-status').getContext('2d');
+    _charts.implStatus = new Chart(ic, {
       type: 'bar',
       data: {
-        labels: dtEntries.map(([k]) => k),
+        labels: implEntries.map(([k]) => k),
         datasets: [{
-          data: dtEntries.map(([, v]) => v),
-          backgroundColor: '#2d7ae8',
+          data: implEntries.map(([, v]) => v),
+          backgroundColor: implEntries.map(([k]) => IMPL_COLORS[k] || '#2d7ae8'),
           borderRadius: 4,
         }],
       },
@@ -98,6 +84,21 @@ const Dashboard = (() => {
           y: { beginAtZero: true, ticks: { precision: 0, color: '#5a6880' }, grid: { color: '#eef1f5' } },
           x: { ticks: { color: '#5a6880', font: { size: 11 } }, grid: { display: false } },
         },
+      },
+    });
+
+    const entEntries = Object.entries(s.byEntity);
+    const ENTITY_COLORS = ['#1e5fbc', '#01b07a', '#f59e0b'];
+    const ec = document.getElementById('chart-entity').getContext('2d');
+    _charts.entity = new Chart(ec, {
+      type: 'doughnut',
+      data: {
+        labels: entEntries.map(([k]) => k),
+        datasets: [{ data: entEntries.map(([, v]) => v), backgroundColor: ENTITY_COLORS, borderWidth: 2, borderColor: '#fff' }],
+      },
+      options: {
+        cutout: '55%',
+        plugins: { legend: { position: 'right', labels: { font: { size: 11 }, color: '#5a6880', boxWidth: 10 } } },
       },
     });
   }

@@ -1,0 +1,222 @@
+[
+  {
+    "id": 1,
+    "name": "CMF – Comisión para el Mercado Financiero",
+    "institution": "CMF",
+    "info_type": "Normas de Carácter General (NCG), Circulares, Resoluciones, Acuerdos de Junta, normas en consulta, sanciones, jurisprudencia administrativa",
+    "url": "www.cmfchile.cl",
+    "review_frequency": "Semanal",
+    "responsible_area": "Compliance / Legal",
+    "criticality": "ALTA",
+    "comments": "Regulador principal de Global Card S.A. Publica normas en consulta con plazo de comentarios que debe monitorearse activamente. Fuente de normativa de medios de pago, gobierno corporativo y consumidor financiero."
+  },
+  {
+    "id": 2,
+    "name": "UAF – Unidad de Análisis Financiero",
+    "institution": "UAF",
+    "info_type": "Circulares ALA/CFT, instrucciones, listas, sanciones, guías de cumplimiento, reportabilidad ROS, sistema SINACOFI",
+    "url": "www.uaf.cl",
+    "review_frequency": "Semanal",
+    "responsible_area": "Compliance / AML",
+    "criticality": "ALTA",
+    "comments": "Regulador ALA/CFT fundamental para ambas entidades. Actualizaciones frecuentes en PEP, listas de sanciones y tipologías de lavado de activos."
+  },
+  {
+    "id": 3,
+    "name": "Banco Central de Chile",
+    "institution": "Banco Central de Chile",
+    "info_type": "Compendio de Normas Financieras, Compendio de Normas de Cambios Internacionales, Acuerdos del Consejo, normas en consulta",
+    "url": "www.bcentral.cl",
+    "review_frequency": "Quincenal",
+    "responsible_area": "Legal / Operaciones",
+    "criticality": "ALTA",
+    "comments": "Clave para Global 81 SpA en transferencias internacionales, cambio de divisas y regulación cambiaria. El Compendio de Normas de Cambios es la referencia primaria para operaciones transfronterizas."
+  },
+  {
+    "id": 4,
+    "name": "Diario Oficial de Chile",
+    "institution": "Gobierno de Chile",
+    "info_type": "Leyes promulgadas, decretos supremos, reglamentos, normas administrativas de toda la institucionalidad pública",
+    "url": "www.diariooficial.interior.gob.cl",
+    "review_frequency": "Diaria (alertas automatizadas)",
+    "responsible_area": "Legal / Compliance",
+    "criticality": "ALTA",
+    "comments": "Fuente primaria de leyes y decretos. Configurar alertas por palabras clave: medios de pago, fintech, datos personales, emisores, transferencias, ciberseguridad."
+  },
+  {
+    "id": 5,
+    "name": "Biblioteca del Congreso – Ley Chile",
+    "institution": "Congreso Nacional",
+    "info_type": "Texto oficial de leyes vigentes, historial de modificaciones, decretos con fuerza de ley (DFL)",
+    "url": "www.bcn.cl / www.leychile.cl",
+    "review_frequency": "Quincenal",
+    "responsible_area": "Legal",
+    "criticality": "ALTA",
+    "comments": "Repositorio definitivo del texto vigente de todas las leyes chilenas. Imprescindible para verificar versiones actualizadas de Ley N°19.913, N°20.950, N°21.521, N°21.719, etc."
+  },
+  {
+    "id": 6,
+    "name": "Cámara de Diputadas y Diputados",
+    "institution": "Cámara de Diputadas y Diputados",
+    "info_type": "Proyectos de ley en tramitación, estado de avance, informes de comisiones de Hacienda y Economía, indicaciones",
+    "url": "www.camara.cl/legislacion/ProyectosSearch",
+    "review_frequency": "Quincenal",
+    "responsible_area": "Legal / Compliance",
+    "criticality": "ALTA",
+    "comments": "Permite identificar proyectos en etapas tempranas. Seguir boletines de: fintech, medios de pago, protección de datos, responsabilidad penal empresas, ciberseguridad."
+  },
+  {
+    "id": 7,
+    "name": "Senado de Chile",
+    "institution": "Senado de Chile",
+    "info_type": "Proyectos de ley, estado en Senado, votaciones, informes de comisiones de Hacienda, Economía y Constitución",
+    "url": "www.senado.cl/tramitacion-de-proyectos",
+    "review_frequency": "Quincenal",
+    "responsible_area": "Legal / Compliance",
+    "criticality": "ALTA",
+    "comments": "Complementario al seguimiento de la Cámara. Especial atención a Comisiones de Hacienda, Economía y Constitución de Legislación y Justicia."
+  },
+  {
+    "id": 8,
+    "name": "SERNAC – Servicio Nacional del Consumidor",
+    "institution": "SERNAC",
+    "info_type": "Instrucciones, circulares, interpretaciones Ley N°19.496, sanciones, normas sectoriales de servicios financieros digitales",
+    "url": "www.sernac.cl",
+    "review_frequency": "Mensual",
+    "responsible_area": "Legal / CX / Producto",
+    "criticality": "ALTA",
+    "comments": "Competencia sobre contratos, publicidad y atención al cliente. Creciente interés regulatorio en servicios financieros digitales. Sus circulares sobre servicios financieros son de aplicación directa."
+  },
+  {
+    "id": 9,
+    "name": "Agencia de Protección de Datos Personales",
+    "institution": "Agencia de Protección de Datos Personales",
+    "info_type": "Instrucciones, resoluciones, guías de implementación Ley N°21.719 (nueva Ley de Datos Personales)",
+    "url": "www.agenciadatos.cl",
+    "review_frequency": "Mensual",
+    "responsible_area": "Legal / Tecnología / Datos",
+    "criticality": "ALTA",
+    "comments": "Ley N°21.719 en implementación escalonada (2025-2026). La Agencia emitirá instrucciones que impactan directamente el tratamiento de datos de clientes. Seguimiento prioritario."
+  },
+  {
+    "id": 10,
+    "name": "ANCI – Agencia Nacional de Ciberseguridad",
+    "institution": "ANCI (Ley N°21.663)",
+    "info_type": "Instrucciones de seguridad, estándares, obligaciones de reporte de incidentes, certificaciones de operadores de servicios esenciales",
+    "url": "www.anci.gob.cl",
+    "review_frequency": "Mensual",
+    "responsible_area": "Tecnología / Seguridad / Compliance",
+    "criticality": "ALTA",
+    "comments": "Ley Marco de Ciberseguridad clasifica servicios financieros digitales como operadores de importancia vital. Global66 puede quedar sujeta a reporte de incidentes y auditorías. Seguimiento urgente."
+  },
+  {
+    "id": 11,
+    "name": "CSIRT Sector Financiero (CMF)",
+    "institution": "CMF / Sector Financiero",
+    "info_type": "Alertas de ciberseguridad, vulnerabilidades, instrucciones de respuesta a incidentes del sector financiero",
+    "url": "www.cmfchile.cl (sección ciberseguridad)",
+    "review_frequency": "Semanal",
+    "responsible_area": "Tecnología / Seguridad",
+    "criticality": "ALTA",
+    "comments": "Coordinación ante incidentes de seguridad en el sector financiero. Publicaciones relevantes para la gestión de riesgo tecnológico y continuidad operacional."
+  },
+  {
+    "id": 12,
+    "name": "Ministerio de Hacienda",
+    "institution": "Ministerio de Hacienda",
+    "info_type": "Decretos supremos, reglamentos de leyes financieras, informes de política económica, iniciativas legislativas ejecutivo",
+    "url": "www.hacienda.cl",
+    "review_frequency": "Mensual",
+    "responsible_area": "Legal / Compliance",
+    "criticality": "MEDIA-ALTA",
+    "comments": "Lidera iniciativas de regulación fintech y open finance. Revisar especialmente el portal de consultas públicas de normas reglamentarias en elaboración."
+  },
+  {
+    "id": 13,
+    "name": "Ministerio de Economía, Fomento y Turismo",
+    "institution": "Ministerio de Economía",
+    "info_type": "Políticas de competencia, regulación digital, normativa comercio electrónico, fintech, protección al consumidor",
+    "url": "www.economia.gob.cl",
+    "review_frequency": "Mensual",
+    "responsible_area": "Legal / Producto",
+    "criticality": "MEDIA",
+    "comments": "Relevante para normativa de competencia, economía digital y protección al consumidor. Coordina con SERNAC en servicios digitales."
+  },
+  {
+    "id": 14,
+    "name": "SII – Servicio de Impuestos Internos",
+    "institution": "SII",
+    "info_type": "Circulares, resoluciones, oficios, instrucciones tributarias, normativa sobre activos digitales y facturación electrónica",
+    "url": "www.sii.cl",
+    "review_frequency": "Mensual",
+    "responsible_area": "Finanzas / Legal",
+    "criticality": "MEDIA",
+    "comments": "Tratamiento tributario de cambios de divisas, comisiones de transferencias y activos digitales. El SII ha emitido instrucciones específicas sobre criptoactivos y servicios financieros digitales."
+  },
+  {
+    "id": 15,
+    "name": "Tesorería General de la República",
+    "institution": "Tesorería General de la República",
+    "info_type": "Normativa de pagos al Estado, convenios de pago, normativa de cobranza tributaria",
+    "url": "www.tesoreria.cl",
+    "review_frequency": "Trimestral",
+    "responsible_area": "Finanzas",
+    "criticality": "BAJA",
+    "comments": "Relevante para obligaciones tributarias y pagos al Fisco. Monitoreo de baja frecuencia salvo cambios legislativos que amplíen su competencia."
+  },
+  {
+    "id": 16,
+    "name": "Dirección del Trabajo (DT)",
+    "institution": "Dirección del Trabajo",
+    "info_type": "Circulares, dictámenes, instrucciones en materia laboral, teletrabajo, jornada, subcontratación, compliance laboral",
+    "url": "www.dt.gob.cl",
+    "review_frequency": "Trimestral",
+    "responsible_area": "People / Legal",
+    "criticality": "MEDIA",
+    "comments": "Compliance laboral interno, teletrabajo y subcontratación. Los dictámenes de la DT son fuente de interpretación vinculante en materia laboral."
+  },
+  {
+    "id": 17,
+    "name": "GAFI / FATF",
+    "institution": "Grupo de Acción Financiera Internacional",
+    "info_type": "Estándares internacionales ALA/CFT/PADM, evaluaciones mutuas, guías sectoriales, lista gris y negra de países",
+    "url": "www.fatf-gafi.org",
+    "review_frequency": "Trimestral",
+    "responsible_area": "Compliance / AML",
+    "criticality": "ALTA",
+    "comments": "Estándares GAFI adoptados por Chile vía UAF y CMF. Actualizaciones de listas de países (lista gris/negra) impactan directamente las políticas de debida diligencia y restricciones operativas."
+  },
+  {
+    "id": 18,
+    "name": "GAFILAT",
+    "institution": "Grupo de Acción Financiera de Latinoamérica",
+    "info_type": "Tipologías regionales AML/CFT, guías, evaluaciones mutuas, normativa AML en la región",
+    "url": "www.gafilat.org",
+    "review_frequency": "Trimestral",
+    "responsible_area": "Compliance / AML",
+    "criticality": "ALTA",
+    "comments": "Referencia regional para tipologías de lavado relevantes para transferencias internacionales y pagos digitales. Evalúa a Chile periódicamente."
+  },
+  {
+    "id": 19,
+    "name": "OFAC – Office of Foreign Assets Control",
+    "institution": "Departamento del Tesoro EE.UU.",
+    "info_type": "Listas SDN y OFAC, sanciones internacionales, guías de cumplimiento, penalidades por incumplimiento",
+    "url": "ofac.treasury.gov",
+    "review_frequency": "Semanal (automatizada)",
+    "responsible_area": "Compliance / AML / Producto",
+    "criticality": "ALTA",
+    "comments": "Monitoreo automatizado e integrado en sistemas de screening de clientes y contrapartes. Cualquier actualización relevante debe gestionarse de manera inmediata."
+  },
+  {
+    "id": 20,
+    "name": "ONU – Comité de Sanciones",
+    "institution": "Naciones Unidas",
+    "info_type": "Listas de sanciones ONU, resoluciones del Consejo de Seguridad, actualizaciones de sujetos designados",
+    "url": "www.un.org/securitycouncil/sanctions",
+    "review_frequency": "Semanal (automatizada)",
+    "responsible_area": "Compliance / AML",
+    "criticality": "ALTA",
+    "comments": "Base legal internacional de las sanciones incorporadas por Chile. Integrar en sistemas de screening junto con listas OFAC y Unión Europea."
+  }
+]

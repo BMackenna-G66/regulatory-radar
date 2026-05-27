@@ -1,13 +1,15 @@
-/**
- * App router + init
- */
 const App = (() => {
   const PAGES = {
-    dashboard: { title: 'Dashboard Ejecutivo',   render: () => Dashboard.render() },
-    inbox:     { title: 'Bandeja de Revisión',   render: () => Inbox.render() },
-    detail:    { title: 'Detalle de Normativa',  render: () => {} },
-    tracking:  { title: 'Seguimiento',           render: () => Tracking.render() },
-    export:    { title: 'Exportar Bitácora',     render: () => Export.updatePreview() },
+    dashboard:  { title: 'Dashboard Ejecutivo',            render: () => Dashboard.render() },
+    inbox:      { title: 'Normativas',                     render: () => Inbox.render() },
+    detail:     { title: 'Detalle de Normativa',           render: () => {} },
+    categories: { title: 'Categorias Normativas',          render: () => Categories.render() },
+    sources:    { title: 'Mapa de Fuentes Regulatorias',   render: () => Sources.render() },
+    tracking:   { title: 'Seguimiento de Implementacion',  render: () => Tracking.render() },
+    changes:    { title: 'Registro de Cambios Normativos', render: () => Changes.render() },
+    alerts:     { title: 'Alertas Regulatorias',           render: () => Alerts.render() },
+    report:     { title: 'Reporte Mensual — Comites',      render: () => Report.render() },
+    export:     { title: 'Exportar Bitacora',              render: () => Export.updatePreview() },
   };
 
   let _current = 'dashboard';
@@ -16,22 +18,16 @@ const App = (() => {
     if (!PAGES[page]) return;
     _current = page;
 
-    // Show/hide pages
     document.querySelectorAll('.page').forEach(el => el.style.display = 'none');
     const pageEl = document.getElementById(`page-${page}`);
     if (pageEl) pageEl.style.display = '';
 
-    // Update nav
     document.querySelectorAll('.nav-link').forEach(a => {
       a.classList.toggle('active', a.dataset.page === page);
     });
 
-    // Update topbar title
     document.getElementById('page-title').textContent = PAGES[page].title;
-
-    // Update URL hash
     history.replaceState(null, '', `#${page}`);
-
     PAGES[page].render();
   }
 
@@ -45,7 +41,8 @@ const App = (() => {
     loader.style.display = '';
     Data.load().then(() => {
       loader.style.display = 'none';
-      document.getElementById('last-updated').textContent = `Actualizado: ${new Date().toLocaleTimeString('es-CL')}`;
+      document.getElementById('last-updated').textContent =
+        `Actualizado: ${new Date().toLocaleTimeString('es-CL')}`;
       navigate(_current);
     });
   }
@@ -60,7 +57,6 @@ const App = (() => {
   }
 
   async function init() {
-    // Wire nav clicks
     document.querySelectorAll('.nav-link').forEach(a => {
       a.addEventListener('click', e => {
         e.preventDefault();
@@ -68,12 +64,11 @@ const App = (() => {
       });
     });
 
-    // Load data
     await Data.load();
     document.getElementById('global-loader').style.display = 'none';
-    document.getElementById('last-updated').textContent = `Actualizado: ${new Date().toLocaleTimeString('es-CL')}`;
+    document.getElementById('last-updated').textContent =
+      `Actualizado: ${new Date().toLocaleTimeString('es-CL')}`;
 
-    // Route from hash or default
     const hash = window.location.hash.replace('#', '') || 'dashboard';
     navigate(PAGES[hash] ? hash : 'dashboard');
   }

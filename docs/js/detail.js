@@ -1,15 +1,21 @@
 const Detail = (() => {
   let _currentId = null;
 
-  const STATUS_LABEL = {
-    nuevo:                  'Nuevo',
-    en_revision:            'En revision',
-    no_aplica:              'No aplica',
-    aplica_informativo:     'Aplica — Informativo',
-    aplica_requiere_accion: 'Aplica — Requiere accion',
-    implementado:           'Implementado',
-    vencido:                'Vencido',
+  const IMPL_LABEL = {
+    'Implementado':  'Implementado',
+    'En Proceso':    'En Proceso',
+    'Pendiente':     'Pendiente',
+    'N/A':           'No aplica',
   };
+
+  const IMPL_BADGE = {
+    'Implementado': 'implementado',
+    'En Proceso':   'aplica_requiere_accion',
+    'Pendiente':    'nuevo',
+    'N/A':          'no_aplica',
+  };
+
+  const IMPACT_COLORS = { 'ALTO': 'var(--critico)', 'MEDIO': 'var(--alto)', 'BAJO': 'var(--bajo)' };
 
   function render(itemId) {
     _currentId = itemId;
@@ -17,62 +23,89 @@ const Detail = (() => {
     const analysis = Data.analysisFor(itemId);
     if (!item) { App.toast('Normativa no encontrada', 'error'); return; }
 
-    document.getElementById('detail-title').textContent = item.title;
+    document.getElementById('detail-title').textContent = `${item.identifier || ''} — ${item.title}`;
+    const implBadge = IMPL_BADGE[item.implementation_status] || 'nuevo';
+    const riskBadge = item.risk_consolidated === 'ALTO' ? 'critico' : item.risk_consolidated === 'MEDIO' ? 'alto' : 'bajo';
     document.getElementById('detail-status-badge').innerHTML =
-      `<span class="badge badge-${item.status}">${STATUS_LABEL[item.status] || item.status}</span>`;
+      `<span class="badge badge-${implBadge}">${item.implementation_status || '—'}</span>` +
+      `<span class="badge badge-${riskBadge}" style="margin-left:6px;">Riesgo ${item.risk_consolidated || '—'}</span>` +
+      `<span class="badge" style="background:#e8f0fd;color:#1e5fbc;margin-left:6px;font-size:.72rem;">${item.entity_applicable || '—'}</span>`;
 
     document.getElementById('detail-meta').innerHTML = [
-      { label: 'Regulador',    value: item.regulator },
-      { label: 'Tipo',         value: item.document_type || '—' },
-      { label: 'Publicado',    value: item.publication_date || '—' },
-      { label: 'Detectado',    value: item.detected_at?.slice(0, 10) || '—' },
+      { label: 'Regulador',   value: item.regulator },
+      { label: 'Tipo',        value: item.document_type || '—' },
+      { label: 'Publicado',   value: item.publication_date || '—' },
+      { label: 'Vigencia',    value: item.effective_date || '—' },
+      { label: 'Entidad',     value: item.entity_applicable || '—' },
+      { label: 'Area resp.',  value: item.responsible_area || '—' },
     ].map(m => `<div class="meta-item">
         <span class="label">${m.label}</span>
         <span class="value">${m.value}</span>
       </div>`).join('');
 
-    _renderAnalysis(analysis);
+    _renderImpactMatrix(item);
+    _renderAnalysis(analysis, item);
+    _renderObligations(item);
     _renderOriginal(item);
-    _renderTrackingForm(itemId, analysis);
+    _renderTrackingForm(itemId, analysis, item);
 
-    // Reset to first tab
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
     document.querySelector('.tab[data-tab="analysis"]')?.classList.add('active');
     document.getElementById('tab-analysis')?.classList.add('active');
   }
 
-  function _renderAnalysis(a) {
+  function _renderImpactMatrix(item) {
+    const dims = [
+      { key: 'impact_legal',         label: 'Legal' },
+      { key: 'impact_operational',   label: 'Operacional' },
+      { key: 'impact_technological', label: 'Tecnologico' },
+      { key: 'impact_aml_cft',       label: 'AML/CFT' },
+      { key: 'impact_customer',      label: 'Clientes' },
+    ];
+    document.getElementById('detail-impact-matrix').innerHTML = dims.map(d => {
+      const val = item[d.key] || '—';
+      const color = IMPACT_COLORS[val] || '#94a3b8';
+      return `<div class="impact-dim">
+        <div class="impact-dim-label">${d.label}</div>
+        <div class="impact-dim-value" style="color:${color};">${val}</div>
+        <div class="impact-dim-bar">
+          <div class="impact-dim-fill" style="background:${color};width:${val==='ALTO'?100:val==='MEDIO'?55:25}%;"></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function _renderAnalysis(a, item) {
+    const riskCls = item.risk_consolidated === 'ALTO' ? 'critico' : item.risk_consolidated === 'MEDIO' ? 'alto' : 'bajo';
+
+    document.getElementById('detail-kpis').innerHTML = [
+      { label: 'Riesgo Consolidado', value: item.risk_consolidated || '—', cls: riskCls },
+      { label: 'Prioridad Impl.',    value: item.implementation_deadline || '—', cls: '' },
+      { label: 'Estado Impl.',       value: item.implementation_status || '—', cls: '' },
+      { label: 'Entidad',            value: item.entity_applicable || '—', cls: '' },
+    ].map(k => `<div class="kpi-card ${k.cls}">
+        <div class="kpi-label">${k.label}</div>
+        <div class="kpi-value" style="font-size:1.1rem;">${k.value}</div>
+      </div>`).join('');
+
     if (!a) {
-      document.getElementById('detail-kpis').innerHTML =
-        '<p style="color:#94a3b8;font-size:.84rem;">Analisis no disponible para esta norma.</p>';
-      document.getElementById('detail-analysis-grid').innerHTML = '';
+      document.getElementById('detail-analysis-grid').innerHTML =
+        '<div class="detail-card"><p style="color:#94a3b8;">Analisis no disponible.</p></div>';
       return;
     }
 
-    document.getElementById('detail-kpis').innerHTML = [
-      { label: 'Risk Score', value: a.risk_score ?? '—', cls: '' },
-      { label: 'Nivel',      value: (a.risk_level || '—').toUpperCase(), cls: a.risk_level },
-      { label: 'Aplica',     value: a.applies || '—', cls: '' },
-      { label: 'Criticidad', value: (a.criticality || '—').toUpperCase(), cls: a.criticality },
-    ].map(k => `<div class="kpi-card ${k.cls}">
-        <div class="kpi-label">${k.label}</div>
-        <div class="kpi-value" style="font-size:1.5rem;">${k.value}</div>
-      </div>`).join('');
-
     const left = [
-      { title: 'Resumen ejecutivo',       text: a.executive_summary },
-      { title: 'Principales cambios',     text: a.main_changes },
-      { title: 'Posible impacto',         text: a.possible_impact },
-      { title: 'Obligaciones detectadas', text: a.detected_obligations },
+      { title: 'Resumen ejecutivo',     text: a.executive_summary || item.executive_summary },
+      { title: 'Impacto posible',       text: a.possible_impact || item.required_actions },
+      { title: 'Accion recomendada',    text: a.recommended_action || item.required_actions },
     ];
     const right = [
-      { title: 'Areas afectadas',          text: a.affected_areas },
-      { title: 'Productos / procesos',     text: a.affected_products },
-      { title: 'Fecha max. de aplicacion', text: a.max_application_date || 'No especificada' },
-      { title: 'Categoria tematica',       text: a.thematic_classification },
-      { title: 'Area sugerida',            text: a.suggested_area },
-      { title: 'Accion recomendada',       text: a.recommended_action },
+      { title: 'Areas afectadas',       text: a.affected_areas || item.responsible_area },
+      { title: 'Fecha max. aplicacion', text: a.max_application_date || item.implementation_deadline || 'No especificada' },
+      { title: 'Categoria tematica',    text: a.thematic_classification },
+      { title: 'Materia regulada',      text: item.regulated_subject },
+      { title: 'Evidencia esperada',    text: item.expected_evidence },
     ];
 
     document.getElementById('detail-analysis-grid').innerHTML =
@@ -84,41 +117,73 @@ const Detail = (() => {
       </div>`;
   }
 
+  function _renderObligations(item) {
+    const el = document.getElementById('detail-obligations-content');
+    if (!el) return;
+    el.innerHTML = `
+      <div class="detail-card" style="margin-top:16px;">
+        <h3>Obligaciones principales para Global66</h3>
+        <p>${item.main_obligations || '—'}</p>
+      </div>
+      <div class="detail-card">
+        <h3>Acciones requeridas</h3>
+        <p>${item.required_actions || '—'}</p>
+      </div>
+      <div class="detail-card">
+        <h3>Evidencia de cumplimiento esperada</h3>
+        <p>${item.expected_evidence || '—'}</p>
+      </div>
+      <div class="detail-card">
+        <h3>Observaciones</h3>
+        <p>${item.observations || '—'}</p>
+      </div>`;
+  }
+
   function _renderOriginal(item) {
     const link = document.getElementById('detail-source-link');
     if (item.source_url) {
-      link.href        = item.source_url;
+      link.href        = item.source_url.startsWith('http') ? item.source_url : `https://${item.source_url}`;
       link.textContent = item.source_url;
     } else {
       link.href        = '#';
       link.textContent = 'URL no disponible';
     }
 
-    document.getElementById('detail-original-info').innerHTML =
-      [
-        ['Regulador',       item.regulator],
-        ['Tipo',            item.document_type || '—'],
-        ['Pais',            item.country],
-        ['Publicado',       item.publication_date || '—'],
-        ['Detectado',       item.detected_at?.slice(0, 10) || '—'],
-        ['Estado actual',   item.status],
-        ['Hash contenido',  item.content_hash],
-      ].map(([l, v]) => `<div style="display:flex;gap:0;padding:5px 0;border-bottom:1px solid var(--border);">
-          <div style="width:160px;font-weight:600;color:#5a6880;font-size:.8rem;">${l}</div>
-          <div style="font-size:.84rem;">${v}</div>
-        </div>`).join('');
+    document.getElementById('detail-original-info').innerHTML = [
+      ['Identificador',        item.identifier],
+      ['Regulador',            item.regulator],
+      ['Tipo',                 item.document_type],
+      ['Entidad aplicable',    item.entity_applicable],
+      ['Publicado',            item.publication_date],
+      ['Vigencia',             item.effective_date],
+      ['Estado norma',         item.norm_state],
+      ['Materia regulada',     item.regulated_subject],
+      ['Riesgo consolidado',   item.risk_consolidated],
+      ['Impacto legal',        item.impact_legal],
+      ['Impacto operacional',  item.impact_operational],
+      ['Impacto tecnologico',  item.impact_technological],
+      ['Impacto AML/CFT',      item.impact_aml_cft],
+      ['Impacto clientes',     item.impact_customer],
+      ['Estado implementacion',item.implementation_status],
+      ['Fecha limite',         item.implementation_deadline],
+      ['Ultima revision',      item.last_review_date],
+      ['Responsable',          item.responsible_update],
+    ].map(([l, v]) => `<div style="display:flex;gap:0;padding:5px 0;border-bottom:1px solid var(--border);">
+        <div style="width:180px;font-weight:600;color:#5a6880;font-size:.8rem;flex-shrink:0;">${l}</div>
+        <div style="font-size:.84rem;">${v || '—'}</div>
+      </div>`).join('');
   }
 
-  function _renderTrackingForm(itemId, analysis) {
+  function _renderTrackingForm(itemId, analysis, item) {
     const t = Tracking.get(itemId) || {};
     const d = {
-      applies:          t.applies          || analysis?.applies       || 'revisar',
-      responsible_area: t.responsible_area || analysis?.suggested_area|| 'Compliance',
+      applies:          t.applies          || (item.implementation_status === 'N/A' ? 'No' : 'Si'),
+      responsible_area: t.responsible_area || (item.responsible_area || 'Compliance').split('/')[0].trim(),
       owner:            t.owner            || '',
-      due_date:         t.due_date         || analysis?.max_application_date || '',
-      impact_level:     t.impact_level     || analysis?.criticality   || 'medio',
-      progress_status:  t.progress_status  || 'pendiente_revision',
-      required_action:  t.required_action  || analysis?.recommended_action || '',
+      due_date:         t.due_date         || '',
+      impact_level:     t.impact_level     || (item.risk_consolidated === 'ALTO' ? 'critico' : item.risk_consolidated === 'MEDIO' ? 'alto' : 'bajo'),
+      progress_status:  t.progress_status  || _implToProgress(item.implementation_status),
+      required_action:  t.required_action  || item.required_actions || '',
       action_plan:      t.action_plan      || '',
       comments:         t.comments         || '',
       evidence_url:     t.evidence_url     || '',
@@ -136,6 +201,12 @@ const Detail = (() => {
     document.getElementById('tf-plan').value      = d.action_plan;
     document.getElementById('tf-comments').value  = d.comments;
     document.getElementById('tf-evidence').value  = d.evidence_url;
+  }
+
+  function _implToProgress(impl) {
+    if (impl === 'Implementado') return 'implementado';
+    if (impl === 'En Proceso')   return 'en_implementacion';
+    return 'pendiente_revision';
   }
 
   function currentId() { return _currentId; }
