@@ -71,6 +71,9 @@ const App = (() => {
 
     const hash = window.location.hash.replace('#', '') || 'dashboard';
     navigate(PAGES[hash] ? hash : 'dashboard');
+
+    // Check GitHub Actions status on load (silencioso si no está configurado)
+    GitHub.init();
   }
 
   window.addEventListener('hashchange', () => {
