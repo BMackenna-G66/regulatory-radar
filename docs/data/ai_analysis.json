@@ -2753,5 +2753,43 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-06-04T12:13:15"
+  },
+  {
+    "item_id": 146,
+    "executive_summary": "Documento Norma CMF emitido por CMF. Título: CMF aplica sanciones de censura a compañía y corredora de seguros por comercializar pólizas con coberturas que no se ajustaban a la Ley N°20.009. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Sanciones",
+    "risk_score": 40,
+    "risk_level": "medio",
+    "applies": "revisar",
+    "applies_reason": "Posible impacto. Requiere revisión.",
+    "suggested_area": "Compliance",
+    "criticality": "medio",
+    "recommended_action": "Evaluar aplicabilidad con Compliance/Legal.",
+    "analyzed_at": "2026-06-05T12:14:52"
+  },
+  {
+    "item_id": 147,
+    "executive_summary": "Documento Alerta Sanciones emitido por OFAC / GAFI. Título: OFAC – Cuba Designations; Issuance of Cuba-related Frequently Asked Question. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Otros",
+    "risk_score": 0,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Compliance",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-06-05T12:14:53"
   }
 ]
