@@ -2810,5 +2810,24 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-06-08T13:15:02"
+  },
+  {
+    "item_id": 149,
+    "executive_summary": "Documento Norma CMF emitido por CMF. Título: \"Pagos digitales: ¿Dónde estamos parados?\". Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Operacional",
+    "risk_score": 25,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Operaciones",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-06-10T12:26:58"
   }
 ]
