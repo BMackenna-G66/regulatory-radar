@@ -18,7 +18,26 @@ const Data = (() => {
     return { items, analysis, sources, categories };
   }
 
-  function items()      { return _items; }
+  function _getManualItems() {
+    try { return JSON.parse(localStorage.getItem('rr_manual_items_v1') || '[]'); }
+    catch (_) { return []; }
+  }
+
+  function _getOverrides() {
+    try { return JSON.parse(localStorage.getItem('rr_item_overrides_v1') || '{}'); }
+    catch (_) { return {}; }
+  }
+
+  function items() {
+    const overrides = _getOverrides();
+    const manual    = _getManualItems();
+    const base = _items.map(item => {
+      const ov = overrides[item.id];
+      return ov ? { ...item, ...ov } : item;
+    });
+    return [...base, ...manual];
+  }
+
   function analysis()   { return _analysis; }
   function sources()    { return _sources; }
   function categories() { return _categories; }
@@ -28,11 +47,11 @@ const Data = (() => {
   }
 
   function itemById(id) {
-    return _items.find(i => i.id === id) || null;
+    return items().find(i => i.id === id) || null;
   }
 
   function enriched(filters = {}) {
-    return _items
+    return items()
       .map(item => {
         const a = analysisFor(item.id) || {};
         const t = Tracking.get(item.id) || {};

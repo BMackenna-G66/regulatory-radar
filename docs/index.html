@@ -97,6 +97,7 @@
     <div id="page-inbox" class="page" style="display:none;">
       <div class="page-header">
         <h1>Normativas <span id="inbox-count" class="badge badge-nuevo" style="font-size:.75rem;"></span></h1>
+        <button class="btn btn-primary btn-sm" onclick="NormativaEditor.open()">+ Nueva Normativa</button>
       </div>
       <div class="filter-bar">
         <input  id="filter-search"    class="filter-input" type="text"   placeholder="Buscar por titulo..." />
@@ -145,7 +146,10 @@
           <h1 id="detail-title" style="font-size:1.1rem;"></h1>
           <div id="detail-status-badge" style="margin-top:6px;"></div>
         </div>
-        <button class="btn btn-outline-blue btn-sm" onclick="App.navigate('inbox')">Volver</button>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-primary btn-sm" id="detail-edit-btn" onclick="NormativaEditor.open(Detail.currentId())">Editar</button>
+          <button class="btn btn-outline-blue btn-sm" onclick="App.navigate('inbox')">Volver</button>
+        </div>
       </div>
 
       <div id="detail-meta" class="meta-grid"></div>
@@ -593,6 +597,248 @@
 <!-- ── Toast ──────────────────────────────────────────────────────────────── -->
 <div id="toast-container"></div>
 
+<!-- ── Modal: Normativa Editor ───────────────────────────────────────────── -->
+<div id="modal-normativa-editor" class="modal" style="display:none;">
+  <div class="modal-backdrop" onclick="NormativaEditor.close()"></div>
+  <div class="modal-box" style="max-width:780px;max-height:90vh;display:flex;flex-direction:column;">
+    <div class="modal-header">
+      <span id="ne-modal-title">Nueva Normativa</span>
+      <button onclick="NormativaEditor.close()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:#5a6880;">✕</button>
+    </div>
+
+    <!-- Tabs -->
+    <div style="display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 20px;flex-shrink:0;">
+      <button class="ne-tab active" data-ne-tab="identificacion" style="padding:10px 14px;border:none;background:none;cursor:pointer;font-size:.82rem;font-weight:500;border-bottom:2px solid var(--blue);color:var(--blue);">Identificación</button>
+      <button class="ne-tab" data-ne-tab="fechas" style="padding:10px 14px;border:none;background:none;cursor:pointer;font-size:.82rem;font-weight:500;border-bottom:2px solid transparent;color:#5a6880;">Fechas y Estado</button>
+      <button class="ne-tab" data-ne-tab="contenido" style="padding:10px 14px;border:none;background:none;cursor:pointer;font-size:.82rem;font-weight:500;border-bottom:2px solid transparent;color:#5a6880;">Contenido</button>
+      <button class="ne-tab" data-ne-tab="impacto" style="padding:10px 14px;border:none;background:none;cursor:pointer;font-size:.82rem;font-weight:500;border-bottom:2px solid transparent;color:#5a6880;">Impacto y Riesgo</button>
+      <button class="ne-tab" data-ne-tab="gestion" style="padding:10px 14px;border:none;background:none;cursor:pointer;font-size:.82rem;font-weight:500;border-bottom:2px solid transparent;color:#5a6880;">Gestión</button>
+    </div>
+
+    <!-- Content scrollable -->
+    <div style="overflow-y:auto;flex:1;padding:20px;">
+
+      <!-- TAB: Identificación -->
+      <div id="ne-tab-identificacion" class="ne-tab-pane">
+        <div class="two-col-grid">
+          <div class="form-group" style="grid-column:1/-1;">
+            <label>Nombre de la Norma <span style="color:var(--critico);">*</span></label>
+            <input id="ne-title" type="text" placeholder="Ej. Circular N°62 — Debida Diligencia Mejorada" />
+          </div>
+          <div class="form-group">
+            <label>Regulador <span style="color:var(--critico);">*</span></label>
+            <input id="ne-regulator" type="text" placeholder="Ej. CMF, UAF, BCCh..." />
+          </div>
+          <div class="form-group">
+            <label>N° / Identificador</label>
+            <input id="ne-identifier" type="text" placeholder="Ej. NCG 454, Circular 62..." />
+          </div>
+          <div class="form-group">
+            <label>Tipo de Documento</label>
+            <select id="ne-document-type">
+              <option value="">— Seleccionar —</option>
+              <option>Circular</option>
+              <option>NCG</option>
+              <option>Ley</option>
+              <option>Decreto</option>
+              <option>Resolución</option>
+              <option>Reglamento</option>
+              <option>Instrucción</option>
+              <option>Compendio</option>
+              <option>Proyecto de Ley</option>
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>País</label>
+            <select id="ne-country">
+              <option value="Chile">Chile</option>
+              <option value="Colombia">Colombia</option>
+              <option value="Internacional">Internacional</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Entidad Aplicable</label>
+            <select id="ne-entity">
+              <option value="Ambas">Ambas</option>
+              <option value="Global Card S.A.">Global Card S.A.</option>
+              <option value="Global 81 SpA">Global 81 SpA</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Fechas y Estado -->
+      <div id="ne-tab-fechas" class="ne-tab-pane" style="display:none;">
+        <div class="two-col-grid">
+          <div class="form-group">
+            <label>Fecha de Publicación</label>
+            <input id="ne-pub-date" type="date" />
+          </div>
+          <div class="form-group">
+            <label>Fecha de Vigencia</label>
+            <input id="ne-eff-date" type="date" />
+          </div>
+          <div class="form-group">
+            <label>Estado de la Norma</label>
+            <select id="ne-norm-state">
+              <option value="Vigente">Vigente</option>
+              <option value="Derogada">Derogada</option>
+              <option value="En consulta">En consulta</option>
+              <option value="Proyecto">Proyecto</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Fecha Límite Implementación</label>
+            <input id="ne-impl-deadline" type="date" />
+          </div>
+          <div class="form-group">
+            <label>Estado de Implementación</label>
+            <select id="ne-impl-status">
+              <option value="Pendiente">Pendiente</option>
+              <option value="En Proceso">En Proceso</option>
+              <option value="Implementado">Implementado</option>
+              <option value="N/A">N/A</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Contenido -->
+      <div id="ne-tab-contenido" class="ne-tab-pane" style="display:none;">
+        <div class="form-group">
+          <label>Materia Regulada</label>
+          <input id="ne-subject" type="text" placeholder="Ej. Emisores de tarjetas prepago, AML/CFT..." />
+        </div>
+        <div class="form-group">
+          <label>Resumen Ejecutivo</label>
+          <textarea id="ne-summary" rows="3" placeholder="Descripción breve de qué regula y por qué es relevante..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Obligaciones Principales para Global66</label>
+          <textarea id="ne-obligations" rows="3" placeholder="Qué debe hacer la empresa en concreto..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Acciones Requeridas</label>
+          <textarea id="ne-actions" rows="3" placeholder="Pasos concretos a ejecutar..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Evidencia de Cumplimiento Esperada</label>
+          <textarea id="ne-evidence" rows="2" placeholder="Ej. Política actualizada, registros de capacitación..."></textarea>
+        </div>
+      </div>
+
+      <!-- TAB: Impacto y Riesgo -->
+      <div id="ne-tab-impacto" class="ne-tab-pane" style="display:none;">
+        <div class="form-group">
+          <label>Riesgo Consolidado</label>
+          <select id="ne-risk">
+            <option value="ALTO">ALTO</option>
+            <option value="MEDIO" selected>MEDIO</option>
+            <option value="BAJO">BAJO</option>
+          </select>
+        </div>
+        <div style="font-size:.8rem;font-weight:600;color:#5a6880;margin:14px 0 8px;">Matriz de Impacto 5D</div>
+        <div class="two-col-grid">
+          <div class="form-group">
+            <label>Legal</label>
+            <select id="ne-impact-legal">
+              <option value="">— No aplica —</option>
+              <option value="ALTO">ALTO</option>
+              <option value="MEDIO">MEDIO</option>
+              <option value="BAJO">BAJO</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Operacional</label>
+            <select id="ne-impact-operational">
+              <option value="">— No aplica —</option>
+              <option value="ALTO">ALTO</option>
+              <option value="MEDIO">MEDIO</option>
+              <option value="BAJO">BAJO</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tecnológico</label>
+            <select id="ne-impact-tech">
+              <option value="">— No aplica —</option>
+              <option value="ALTO">ALTO</option>
+              <option value="MEDIO">MEDIO</option>
+              <option value="BAJO">BAJO</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>AML/CFT</label>
+            <select id="ne-impact-aml">
+              <option value="">— No aplica —</option>
+              <option value="ALTO">ALTO</option>
+              <option value="MEDIO">MEDIO</option>
+              <option value="BAJO">BAJO</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Clientes</label>
+            <select id="ne-impact-customer">
+              <option value="">— No aplica —</option>
+              <option value="ALTO">ALTO</option>
+              <option value="MEDIO">MEDIO</option>
+              <option value="BAJO">BAJO</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: Gestión -->
+      <div id="ne-tab-gestion" class="ne-tab-pane" style="display:none;">
+        <div class="two-col-grid">
+          <div class="form-group">
+            <label>Área Responsable Interna</label>
+            <select id="ne-area">
+              <option value="">— Seleccionar —</option>
+              <option>Compliance</option>
+              <option>Legal</option>
+              <option>Fraude</option>
+              <option>Operaciones</option>
+              <option>Producto</option>
+              <option>Finanzas</option>
+              <option>Tecnología</option>
+              <option>Data</option>
+              <option>CX</option>
+              <option>Legal / Operaciones / Compliance / Finanzas</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Responsable de Actualización</label>
+            <input id="ne-responsible-update" type="text" placeholder="Nombre o cargo" />
+          </div>
+          <div class="form-group">
+            <label>Fecha Última Revisión</label>
+            <input id="ne-last-review" type="date" />
+          </div>
+          <div class="form-group">
+            <label>Link Fuente Oficial</label>
+            <input id="ne-source-url" type="url" placeholder="https://..." />
+          </div>
+          <div class="form-group" style="grid-column:1/-1;">
+            <label>Observaciones</label>
+            <textarea id="ne-observations" rows="3" placeholder="Notas internas, contexto adicional..."></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end scrollable -->
+
+    <!-- Footer -->
+    <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
+      <button id="ne-delete-btn" class="btn btn-sm" style="display:none;background:#fef2f2;color:var(--critico);border:1px solid #fecaca;" onclick="NormativaEditor.deleteManual(NormativaEditor.editingId())">Eliminar</button>
+      <div style="display:flex;gap:8px;margin-left:auto;">
+        <button class="btn btn-secondary btn-sm" onclick="NormativaEditor.close()">Cancelar</button>
+        <button class="btn btn-primary btn-sm" onclick="NormativaEditor.save()">Guardar Normativa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ── Modal: GitHub Config ──────────────────────────────────────────────── -->
 <div id="modal-github-config" class="modal" style="display:none;">
   <div class="modal-backdrop" onclick="GitHub.closeConfigModal()"></div>
@@ -643,6 +889,7 @@
 <script src="js/alerts.js"></script>
 <script src="js/report.js"></script>
 <script src="js/export.js"></script>
+<script src="js/normativa-editor.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
