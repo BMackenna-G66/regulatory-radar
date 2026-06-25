@@ -3000,5 +3000,43 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-06-24T11:49:21"
+  },
+  {
+    "item_id": 159,
+    "executive_summary": "Documento Alerta Sanciones emitido por OFAC / GAFI. Título: OFAC – Russia-related Designations Removals. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Otros",
+    "risk_score": 0,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Compliance",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-06-25T11:44:18"
+  },
+  {
+    "item_id": 160,
+    "executive_summary": "Documento Estándar Internacional emitido por GAFI / GAFILAT. Título: Encuentro de preparación estratégica para la Evaluación Mutua de Guatemala. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Otros",
+    "risk_score": 0,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Compliance",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-06-25T11:44:19"
   }
 ]
