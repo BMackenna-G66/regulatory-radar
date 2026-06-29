@@ -3076,5 +3076,43 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-06-26T11:48:54"
+  },
+  {
+    "item_id": 163,
+    "executive_summary": "Documento NCG emitido por CMF. Título: CMF cancela inscripciones en el Registro de Prestadores de Servicios Financieros por incumplimiento de requerimientos de la Ley Fintec y la NCG N°502. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Otros",
+    "risk_score": 40,
+    "risk_level": "medio",
+    "applies": "revisar",
+    "applies_reason": "Posible impacto. Requiere revisión.",
+    "suggested_area": "Compliance",
+    "criticality": "medio",
+    "recommended_action": "Evaluar aplicabilidad con Compliance/Legal.",
+    "analyzed_at": "2026-06-29T13:12:33"
+  },
+  {
+    "item_id": 164,
+    "executive_summary": "Documento Alerta Sanciones emitido por OFAC / GAFI. Título: OFAC – Sudan-related Designations. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Otros",
+    "risk_score": 0,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Compliance",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-06-29T13:12:34"
   }
 ]
