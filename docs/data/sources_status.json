@@ -1,62 +1,62 @@
 {
   "CMF": {
-    "last_checked": "2026-07-02T11:37:16",
+    "last_checked": "2026-07-03T11:35:41",
     "status": "ok",
     "new_items_found": 0,
     "total_scraped": 2,
     "error": null
   },
   "UAF": {
-    "last_checked": "2026-07-02T11:37:16",
+    "last_checked": "2026-07-03T11:35:41",
     "status": "ok",
     "new_items_found": 0,
     "total_scraped": 91,
     "error": null
   },
   "Banco Central de Chile": {
-    "last_checked": "2026-07-02T11:37:16",
+    "last_checked": "2026-07-03T11:35:41",
     "status": "ok",
     "new_items_found": 0,
     "total_scraped": 2,
     "error": null
   },
   "Diario Oficial": {
-    "last_checked": "2026-07-02T11:37:16",
+    "last_checked": "2026-07-03T11:35:41",
     "status": "ok",
     "new_items_found": 0,
     "total_scraped": 0,
     "error": null
   },
   "SERNAC": {
-    "last_checked": "2026-07-02T11:37:16",
+    "last_checked": "2026-07-03T11:35:41",
     "status": "ok",
     "new_items_found": 0,
     "total_scraped": 0,
     "error": null
   },
   "Congreso Nacional": {
-    "last_checked": "2026-07-02T11:37:16",
+    "last_checked": "2026-07-03T11:35:41",
     "status": "ok",
     "new_items_found": 0,
     "total_scraped": 0,
     "error": null
   },
   "OFAC / GAFI": {
-    "last_checked": "2026-07-02T11:37:16",
+    "last_checked": "2026-07-03T11:35:41",
     "status": "ok",
-    "new_items_found": 2,
+    "new_items_found": 0,
     "total_scraped": 9,
     "error": null
   },
   "GAFI / GAFILAT": {
-    "last_checked": "2026-07-02T11:37:16",
+    "last_checked": "2026-07-03T11:35:41",
     "status": "ok",
     "new_items_found": 0,
     "total_scraped": 3,
     "error": null
   },
   "Agencia de Datos": {
-    "last_checked": "2026-07-02T11:37:16",
+    "last_checked": "2026-07-03T11:35:41",
     "status": "ok",
     "new_items_found": 0,
     "total_scraped": 0,
