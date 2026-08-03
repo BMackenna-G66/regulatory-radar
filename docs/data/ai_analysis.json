@@ -3798,5 +3798,24 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-07-31T11:33:17"
+  },
+  {
+    "item_id": 201,
+    "executive_summary": "Documento Norma CMF emitido por CMF. Título: CMF pone en consulta propuesta que facilita el cumplimiento de la obligación legal de las entidades fiscalizadas de enterar recursos a Bomberos. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Otros",
+    "risk_score": 10,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Compliance",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-08-03T12:30:12"
   }
 ]
