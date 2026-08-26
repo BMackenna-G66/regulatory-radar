@@ -4292,5 +4292,24 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-08-25T09:40:54"
+  },
+  {
+    "item_id": 227,
+    "executive_summary": "Documento Norma CMF emitido por CMF. Título: CMF sanciona a dos corredoras de bolsa por ofrecer instrumentos dirigidos a inversionistas calificados a clientes que no tenían esa calidad. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Otros",
+    "risk_score": 25,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "CX",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-08-26T09:47:47"
   }
 ]
