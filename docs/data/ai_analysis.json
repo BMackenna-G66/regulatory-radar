@@ -4425,5 +4425,24 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-08-31T16:54:47"
+  },
+  {
+    "item_id": 234,
+    "executive_summary": "Documento Norma CMF emitido por CMF. Título: CMF sanciona a dos bancos por infracción a la Ley sobre Abandono de Familia y Pago de Pensiones Alimenticias. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Otros",
+    "risk_score": 25,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Legal",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-09-01T14:02:59"
   }
 ]
