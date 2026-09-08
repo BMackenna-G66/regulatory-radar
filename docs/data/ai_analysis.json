@@ -4501,5 +4501,24 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-09-07T14:56:52"
+  },
+  {
+    "item_id": 238,
+    "executive_summary": "Documento Estándar Internacional emitido por GAFI / GAFILAT. Título: El GAFILAT realizó la visita de alto nivel y el curso de país a ser evaluado a Honduras, dando inicio formal a su proceso de evaluación mutua de la 5ta Ronda. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Otros",
+    "risk_score": 0,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Compliance",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-09-08T13:26:43"
   }
 ]
