@@ -4577,5 +4577,24 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-09-09T13:36:19"
+  },
+  {
+    "item_id": 242,
+    "executive_summary": "Documento Norma CMF emitido por CMF. Título: Protección de Datos Personales en el contexto del Sistema de Finanzas Abiertas y el REDEC. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Datos personales",
+    "risk_score": 10,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Data",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-09-10T13:27:43"
   }
 ]
