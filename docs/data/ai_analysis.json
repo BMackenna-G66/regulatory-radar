@@ -4767,5 +4767,24 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-09-17T14:13:46"
+  },
+  {
+    "item_id": 252,
+    "executive_summary": "Documento Alerta Sanciones emitido por OFAC / GAFI. Título: OFAC – Iran-related Designations; Cuba Designations; Belarus-related Designations Removals. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Otros",
+    "risk_score": 0,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Compliance",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-09-18T13:31:58"
   }
 ]
