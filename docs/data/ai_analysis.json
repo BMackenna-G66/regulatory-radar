@@ -5299,5 +5299,43 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-10-16T13:51:27"
+  },
+  {
+    "item_id": 280,
+    "executive_summary": "Documento Circular emitido por SERNAC. Título: Justicia condena a Banco BICE a millonaria multa por no respetar tasas de interés y el reglamento de portabilidad financiera. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Sanciones",
+    "risk_score": 30,
+    "risk_level": "bajo",
+    "applies": "sí",
+    "applies_reason": "Contiene obligaciones o sanciones.",
+    "suggested_area": "Legal",
+    "criticality": "alto",
+    "recommended_action": "Definir plan de implementación con área responsable.",
+    "analyzed_at": "2026-10-19T16:20:42"
+  },
+  {
+    "item_id": 281,
+    "executive_summary": "Documento Alerta Sanciones emitido por OFAC / GAFI. Título: OFAC – Protecting American Intellectual Property Act of 2022 (PAIPA) Designations; Issuance of Associated General Licenses. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Otros",
+    "risk_score": 0,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Compliance",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-10-19T16:20:43"
   }
 ]
