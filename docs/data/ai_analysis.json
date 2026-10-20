@@ -5337,5 +5337,43 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-10-19T16:20:43"
+  },
+  {
+    "item_id": 282,
+    "executive_summary": "Documento Norma CMF emitido por CMF. Título: CMF aplica sanción a persona que realizaba asesorías de inversión sin estar inscrito en el Registro pertinente. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Sanciones",
+    "risk_score": 40,
+    "risk_level": "medio",
+    "applies": "sí",
+    "applies_reason": "Contiene obligaciones o sanciones.",
+    "suggested_area": "Compliance",
+    "criticality": "alto",
+    "recommended_action": "Definir plan de implementación con área responsable.",
+    "analyzed_at": "2026-10-20T14:13:06"
+  },
+  {
+    "item_id": 283,
+    "executive_summary": "Documento Norma CMF emitido por CMF. Título: CMF aplica sanción por infracción a las normas sobre Oferta Pública de Adquisición de Acciones. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Sanciones",
+    "risk_score": 40,
+    "risk_level": "medio",
+    "applies": "sí",
+    "applies_reason": "Contiene obligaciones o sanciones.",
+    "suggested_area": "Compliance",
+    "criticality": "alto",
+    "recommended_action": "Definir plan de implementación con área responsable.",
+    "analyzed_at": "2026-10-20T14:13:07"
   }
 ]
