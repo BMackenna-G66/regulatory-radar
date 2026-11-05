@@ -5622,5 +5622,24 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-11-04T17:00:34"
+  },
+  {
+    "item_id": 297,
+    "executive_summary": "Documento Alerta Sanciones emitido por OFAC / GAFI. Título: OFAC – blication of Iran-related OFAC Alert; Issuance of Amended Venezuela-related General License and Frequently Asked Question. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Otros",
+    "risk_score": 0,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Compliance",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-11-05T17:16:04"
   }
 ]
