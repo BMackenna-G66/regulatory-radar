@@ -77,6 +77,20 @@ def load_existing() -> List[dict]:
     return []
 
 
+DELETED_FILE = ROOT / "docs" / "data" / "deleted_items.json"
+
+
+def load_deleted() -> List[dict]:
+    """Elementos eliminados desde el dashboard (papelera)."""
+    if DELETED_FILE.exists():
+        try:
+            data = json.loads(DELETED_FILE.read_text(encoding="utf-8"))
+            return data if isinstance(data, list) else []
+        except Exception as exc:
+            log.warning("No se pudo leer %s: %s", DELETED_FILE, exc)
+    return []
+
+
 def save_items(items: List[dict]) -> None:
     ITEMS_FILE.parent.mkdir(parents=True, exist_ok=True)
     ITEMS_FILE.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -688,6 +702,8 @@ SCRAPERS = [
 def main():
     existing      = load_existing()
     known_hashes  = {i.get("content_hash","") for i in existing}
+    # Lo eliminado en el dashboard no se vuelve a agregar
+    known_hashes |= {d.get("content_hash") for d in load_deleted() if d.get("content_hash")}
     next_id       = max((i.get("id", 0) for i in existing if isinstance(i.get("id"), int)), default=0) + 1
     status        = load_status()
     now_iso       = datetime.now().isoformat(timespec="seconds")

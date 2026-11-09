@@ -1,4 +1,27 @@
 const Inbox = (() => {
+  const _selected = new Set();
+  let _visibleIds = [];
+
+  function _updateBulkBar() {
+    const btn = document.getElementById('inbox-bulk-delete');
+    if (btn) {
+      btn.style.display = _selected.size ? '' : 'none';
+      btn.textContent = `🗑 Eliminar seleccionadas (${_selected.size})`;
+    }
+    const all = document.getElementById('inbox-select-all');
+    if (all) {
+      const n = _visibleIds.filter(id => _selected.has(id)).length;
+      all.checked = n > 0 && n === _visibleIds.length;
+      all.indeterminate = n > 0 && n < _visibleIds.length;
+    }
+  }
+
+  async function deleteSelected() {
+    const ok = await Deleted.remove([..._selected]);
+    if (ok) _selected.clear();
+    _updateBulkBar();
+  }
+
   const IMPL_BADGE = {
     'Implementado': 'implementado',
     'En Proceso':   'aplica_requiere_accion',
@@ -39,8 +62,13 @@ const Inbox = (() => {
     const counter = document.getElementById('inbox-count');
     if (counter) counter.textContent = `${rows.length} norma${rows.length !== 1 ? 's' : ''}`;
 
+    _selected.forEach(id => { if (!rows.some(r => r.id === id)) _selected.delete(id); });
+    _visibleIds = rows.map(r => r.id);
+    _updateBulkBar();
+    Deleted.updateBadges();
+
     if (!rows.length) {
-      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:#94a3b8;">Sin resultados con los filtros seleccionados</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px;color:#94a3b8;">Sin resultados con los filtros seleccionados</td></tr>`;
       return;
     }
 
@@ -54,6 +82,9 @@ const Inbox = (() => {
           : '<span class="badge" style="background:#fff7e6;color:#92400e;font-size:.68rem;">G81</span>';
 
       return `<tr onclick="App.navigateDetail(${r.id})" title="${r.title}">
+        <td onclick="event.stopPropagation()" style="text-align:center;">
+          <input type="checkbox" class="inbox-select" data-id="${r.id}" ${_selected.has(r.id) ? 'checked' : ''} />
+        </td>
         <td style="white-space:nowrap;font-size:.78rem;">${r.publication_date || r.detected_at?.slice(0,10) || '—'}</td>
         <td style="max-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.78rem;" title="${r.regulator}">${r.regulator}</td>
         <td style="white-space:nowrap;font-size:.72rem;color:#5a6880;">${r.document_type || '—'}</td>
@@ -67,11 +98,27 @@ const Inbox = (() => {
         <td>${entityBadge}</td>
         <td><span class="badge badge-${implCls}" style="font-size:.7rem;">${r.implementation_status || '—'}</span></td>
         <td>
-          <button class="btn btn-outline-blue btn-sm" onclick="event.stopPropagation();App.navigateDetail(${r.id})">Ver</button>
+          <div style="display:flex;gap:4px;">
+            <button class="btn btn-outline-blue btn-sm" onclick="event.stopPropagation();App.navigateDetail(${r.id})">Ver</button>
+            <button class="btn btn-sm btn-danger-soft" title="Eliminar" onclick="event.stopPropagation();Deleted.remove([${r.id}])">🗑</button>
+          </div>
         </td>
       </tr>`;
     }).join('');
   }
+
+  // Selección (checkboxes)
+  document.addEventListener('change', e => {
+    if (e.target.classList?.contains('inbox-select')) {
+      const id = Number(e.target.dataset.id);
+      e.target.checked ? _selected.add(id) : _selected.delete(id);
+      _updateBulkBar();
+    } else if (e.target.id === 'inbox-select-all') {
+      _visibleIds.forEach(id => e.target.checked ? _selected.add(id) : _selected.delete(id));
+      document.querySelectorAll('.inbox-select').forEach(cb => { cb.checked = e.target.checked; });
+      _updateBulkBar();
+    }
+  });
 
   // Wire filter changes
   document.addEventListener('input', e => {
@@ -82,5 +129,5 @@ const Inbox = (() => {
     if (ids.includes(e.target.id)) render();
   });
 
-  return { render, populateFilters };
+  return { render, populateFilters, deleteSelected };
 })();

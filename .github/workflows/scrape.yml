@@ -38,6 +38,7 @@ jobs:
             echo "No new regulatory items found."
           else
             git commit -m "data: scraping run [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+            git pull --rebase origin main
             git push
           fi
 

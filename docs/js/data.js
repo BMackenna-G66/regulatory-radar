@@ -10,6 +10,7 @@ const Data = (() => {
       fetch('./data/ai_analysis.json').then(r => r.json()).catch(() => []),
       fetch('./data/sources.json').then(r => r.json()).catch(() => []),
       fetch('./data/categories.json').then(r => r.json()).catch(() => []),
+      Deleted.load(),
     ]);
     _items      = items;
     _analysis   = analysis;
@@ -35,7 +36,8 @@ const Data = (() => {
       const ov = overrides[item.id];
       return ov ? { ...item, ...ov } : item;
     });
-    return [...base, ...manual];
+    const deleted = new Set(Deleted.entries().map(e => e.id));
+    return [...base, ...manual].filter(i => !deleted.has(i.id));
   }
 
   function analysis()   { return _analysis; }

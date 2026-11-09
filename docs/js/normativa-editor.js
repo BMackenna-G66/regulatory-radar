@@ -43,9 +43,9 @@ const NormativaEditor = (() => {
     document.getElementById('ne-modal-title').textContent =
       itemId !== null ? 'Editar Normativa' : 'Nueva Normativa';
 
-    // Show delete button only for manual items
+    // Delete button for any existing item (manual → borrado duro; scrapeada → papelera)
     const delBtn = document.getElementById('ne-delete-btn');
-    if (delBtn) delBtn.style.display = (itemId !== null && itemId >= 10000) ? '' : 'none';
+    if (delBtn) delBtn.style.display = itemId !== null ? '' : 'none';
 
     // Reset to first tab
     document.querySelectorAll('.ne-tab').forEach(t => t.classList.remove('active'));
@@ -175,6 +175,14 @@ const NormativaEditor = (() => {
     App.reload();
   }
 
+  async function deleteCurrent() {
+    const id = _editingId;
+    if (id === null) return;
+    if (id >= 10000) { deleteManual(id); return; }
+    const ok = await Deleted.remove([id]);
+    if (ok) close();
+  }
+
   // ── Tab switching inside modal ────────────────────────────────────────────
   document.addEventListener('click', e => {
     const tab = e.target.closest('.ne-tab');
@@ -188,5 +196,5 @@ const NormativaEditor = (() => {
 
   function editingId() { return _editingId; }
 
-  return { open, close, save, deleteManual, editingId, getManualItems, getOverrides };
+  return { open, close, save, deleteManual, deleteCurrent, editingId, getManualItems, getOverrides };
 })();
