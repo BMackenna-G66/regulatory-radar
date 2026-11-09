@@ -36,7 +36,8 @@ regulatory-radar/
 │       ├── sources.json           ← 20 fuentes regulatorias
 │       ├── categories.json        ← 20 categorías normativas
 │       ├── changes.json           ← Cambios normativos (seed)
-│       └── sources_status.json    ← Estado último scraping por fuente
+│       ├── sources_status.json    ← Estado último scraping por fuente
+│       └── deleted_items.json     ← Papelera: ítems eliminados desde el dashboard
 │
 ├── scripts/
 │   ├── scraper.py                 ← 9 scrapers activos + dedup + status
@@ -69,6 +70,7 @@ regulatory-radar/
 | `Alerts` | IIFE; `localStorage` key `rr_alerts_v1` |
 | `Report` | IIFE; `render()`, `downloadExcel()` via SheetJS |
 | `Export` | IIFE; `downloadNormogram()` (28 cols), `downloadBitacora()` (tracking) |
+| `Deleted` | IIFE; `remove(ids)`, `restore(id)`, `sync()`; lee `data/deleted_items.json` + overlay `localStorage` `rr_deleted_v1`; `Data.items()` excluye los eliminados en todas las vistas |
 
 **CDN dependencias (en index.html):**
 - Chart.js 4.4.2
@@ -122,7 +124,7 @@ Data.enriched({
 | `GAFI / GAFILAT` | scrape_fatf_gafilat() |
 | `Agencia de Datos` | scrape_agencia_datos() |
 
-Deduplicación via `content_hash` (SHA-256 del título normalizado). IDs autoincremental partiendo del máximo existente.
+Deduplicación via `content_hash` (SHA-256 del título normalizado). Los `content_hash` de `deleted_items.json` también cuentan como conocidos, así lo eliminado en el dashboard no se re-agrega; `analyzer.py` omite los `id` eliminados. IDs autoincremental partiendo del máximo existente.
 
 ---
 

@@ -71,8 +71,20 @@
 
     <!-- DASHBOARD ───────────────────────────────────────────────────────── -->
     <div id="page-dashboard" class="page" style="display:none;">
-      <div class="page-header"><h1>Dashboard Ejecutivo</h1></div>
+      <div class="page-header">
+        <h1>Dashboard Ejecutivo</h1>
+        <button class="btn btn-secondary btn-sm" onclick="Deleted.openTrash()">🗑 Papelera <span class="trash-count"></span></button>
+      </div>
       <div id="kpi-grid" class="kpi-grid"></div>
+      <div class="chart-card recent-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <h3 style="margin:0;">Recién detectadas por el scraper</h3>
+          <span style="font-size:.72rem;color:#5a6880;">Elimina las noticias o normas que no apliquen</span>
+        </div>
+        <table class="data-table">
+          <tbody id="dash-recent-tbody"></tbody>
+        </table>
+      </div>
       <div class="dashboard-charts">
         <div class="chart-card">
           <h3>Normativas por Regulador</h3>
@@ -97,7 +109,11 @@
     <div id="page-inbox" class="page" style="display:none;">
       <div class="page-header">
         <h1>Normativas <span id="inbox-count" class="badge badge-nuevo" style="font-size:.75rem;"></span></h1>
-        <button class="btn btn-primary btn-sm" onclick="NormativaEditor.open()">+ Nueva Normativa</button>
+        <div style="display:flex;gap:8px;">
+          <button id="inbox-bulk-delete" class="btn btn-sm btn-danger-soft" style="display:none;" onclick="Inbox.deleteSelected()"></button>
+          <button class="btn btn-secondary btn-sm" onclick="Deleted.openTrash()">🗑 Papelera <span class="trash-count"></span></button>
+          <button class="btn btn-primary btn-sm" onclick="NormativaEditor.open()">+ Nueva Normativa</button>
+        </div>
       </div>
       <div class="filter-bar">
         <input  id="filter-search"    class="filter-input" type="text"   placeholder="Buscar por titulo..." />
@@ -125,6 +141,7 @@
       <table class="data-table" id="inbox-table">
         <thead>
           <tr>
+            <th style="width:34px;text-align:center;"><input type="checkbox" id="inbox-select-all" title="Seleccionar todas las visibles" /></th>
             <th style="width:90px;">Fecha</th>
             <th style="width:110px;">Regulador</th>
             <th style="width:80px;">Tipo</th>
@@ -132,7 +149,7 @@
             <th style="width:70px;">Riesgo</th>
             <th style="width:90px;">Entidad</th>
             <th style="width:100px;">Estado Impl.</th>
-            <th style="width:50px;"></th>
+            <th style="width:90px;"></th>
           </tr>
         </thead>
         <tbody id="inbox-tbody"></tbody>
@@ -148,6 +165,7 @@
         </div>
         <div style="display:flex;gap:8px;">
           <button class="btn btn-primary btn-sm" id="detail-edit-btn" onclick="NormativaEditor.open(Detail.currentId())">Editar</button>
+          <button class="btn btn-sm btn-danger-soft" onclick="Deleted.remove([Detail.currentId()])">🗑 Eliminar</button>
           <button class="btn btn-outline-blue btn-sm" onclick="App.navigate('inbox')">Volver</button>
         </div>
       </div>
@@ -830,12 +848,29 @@
 
     <!-- Footer -->
     <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
-      <button id="ne-delete-btn" class="btn btn-sm" style="display:none;background:#fef2f2;color:var(--critico);border:1px solid #fecaca;" onclick="NormativaEditor.deleteManual(NormativaEditor.editingId())">Eliminar</button>
+      <button id="ne-delete-btn" class="btn btn-sm" style="display:none;background:#fef2f2;color:var(--critico);border:1px solid #fecaca;" onclick="NormativaEditor.deleteCurrent()">Eliminar</button>
       <div style="display:flex;gap:8px;margin-left:auto;">
         <button class="btn btn-secondary btn-sm" onclick="NormativaEditor.close()">Cancelar</button>
         <button class="btn btn-primary btn-sm" onclick="NormativaEditor.save()">Guardar Normativa</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ── Modal: Papelera (elementos eliminados) ───────────────────────────── -->
+<div id="modal-trash" class="modal" style="display:none;">
+  <div class="modal-backdrop" onclick="Deleted.closeTrash()"></div>
+  <div class="modal-box" style="max-width:900px;">
+    <div class="modal-header">
+      <h3>🗑 Papelera — normativas y noticias eliminadas</h3>
+      <button onclick="Deleted.closeTrash()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:#5a6880;">✕</button>
+    </div>
+    <p style="font-size:.8rem;color:#5a6880;margin:0 0 12px;">Los elementos eliminados se ocultan en todas las vistas, reportes y exportaciones, y el scraper no los vuelve a agregar. Puedes restaurarlos en cualquier momento.</p>
+    <div id="trash-sync-status" style="font-size:.78rem;color:#5a6880;margin-bottom:12px;"></div>
+    <table class="data-table">
+      <thead><tr><th style="width:90px;">Eliminada</th><th style="width:120px;">Regulador</th><th>Título</th><th style="width:160px;">Motivo</th><th style="width:90px;"></th></tr></thead>
+      <tbody id="trash-tbody"></tbody>
+    </table>
   </div>
 </div>
 
@@ -848,10 +883,10 @@
       <button onclick="GitHub.closeConfigModal()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;color:#5a6880;">✕</button>
     </div>
     <div style="padding:20px;font-size:.84rem;color:#5a6880;line-height:1.6;">
-      <p style="margin:0 0 12px;">Necesitas un <strong>Personal Access Token (PAT)</strong> de GitHub con permiso <code>workflow</code> para disparar el scraping manualmente.</p>
+      <p style="margin:0 0 12px;">Necesitas un <strong>Personal Access Token (PAT)</strong> de GitHub con permiso <code>workflow</code> (disparar el scraping) y <code>repo</code> (guardar la papelera de elementos eliminados para todo el equipo).</p>
       <p style="margin:0 0 16px;">
-        <a href="https://github.com/settings/tokens/new?scopes=workflow&description=Radar+Regulatorio" target="_blank" rel="noopener" style="color:var(--blue);">→ Crear token en GitHub</a>
-        &nbsp;(scope: <code>workflow</code>)
+        <a href="https://github.com/settings/tokens/new?scopes=repo,workflow&description=Radar+Regulatorio" target="_blank" rel="noopener" style="color:var(--blue);">→ Crear token en GitHub</a>
+        &nbsp;(scopes: <code>repo</code>, <code>workflow</code> — o un token fine-grained con <em>Contents</em> y <em>Actions</em> en lectura/escritura)
       </p>
       <div class="form-group">
         <label>Usuario / Organización GitHub</label>
@@ -878,6 +913,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="js/github.js"></script>
+<script src="js/deleted.js"></script>
 <script src="js/data.js"></script>
 <script src="js/tracking.js"></script>
 <script src="js/dashboard.js"></script>

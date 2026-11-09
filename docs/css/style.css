@@ -602,3 +602,10 @@ tbody tr:last-child td { border-bottom: none; }
   #content { padding: 16px; }
   .impact-matrix { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ── Eliminar / Papelera ─────────────────────────────────────────────────── */
+.btn-danger-soft {
+  background: #fef2f2; color: var(--critico); border: 1px solid #fecaca;
+}
+.btn-danger-soft:hover { background: #fee2e2; }
+.recent-card { margin-bottom: 20px; }

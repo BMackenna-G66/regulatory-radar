@@ -19,6 +19,7 @@ log = logging.getLogger("analyzer")
 ROOT = Path(__file__).parent.parent
 ITEMS_FILE  = ROOT / "docs" / "data" / "regulatory_items.json"
 ANALYSIS_FILE = ROOT / "docs" / "data" / "ai_analysis.json"
+DELETED_FILE  = ROOT / "docs" / "data" / "deleted_items.json"
 
 CATEGORIES = ["AML","KYC","Fraude","Sanciones","PEP","Protección al consumidor",
                "Datos personales","Criptoactivos","Tributario","Operacional","Otros"]
@@ -208,7 +209,9 @@ def main():
     items = load_json(ITEMS_FILE)
     existing_analysis = load_json(ANALYSIS_FILE)
     analyzed_ids = {a["item_id"] for a in existing_analysis}
-    pending = [i for i in items if i.get("id") and i["id"] not in analyzed_ids]
+    deleted_ids = {d.get("id") for d in (load_json(DELETED_FILE) if DELETED_FILE.exists() else [])}
+    pending = [i for i in items if i.get("id") and i["id"] not in analyzed_ids
+               and i["id"] not in deleted_ids]
 
     log.info("%d items pending analysis", len(pending))
     if not pending:

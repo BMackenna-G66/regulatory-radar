@@ -9,7 +9,32 @@ const Dashboard = (() => {
   function render() {
     const s = Data.stats();
     _renderKPIs(s);
+    _renderRecent();
     _renderCharts(s);
+    Deleted.updateBadges();
+  }
+
+  function _esc(v) {
+    return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  // Últimas detectadas (scraper) con opción de eliminar
+  function _renderRecent() {
+    const tbody = document.getElementById('dash-recent-tbody');
+    if (!tbody) return;
+    const rows = Data.items()
+      .filter(i => i.detected_at)
+      .sort((a, b) => (b.detected_at || '').localeCompare(a.detected_at || ''))
+      .slice(0, 10);
+    tbody.innerHTML = rows.length ? rows.map(r => `
+      <tr onclick="App.navigateDetail(${r.id})">
+        <td style="white-space:nowrap;font-size:.75rem;width:90px;">${_esc(r.publication_date || r.detected_at.slice(0, 10))}</td>
+        <td style="font-size:.75rem;width:130px;">${_esc(r.regulator)}</td>
+        <td style="font-size:.72rem;color:#5a6880;width:120px;">${_esc(r.document_type || '—')}</td>
+        <td><div style="font-size:.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:520px;" title="${_esc(r.title)}">${_esc(r.title)}</div></td>
+        <td style="width:50px;"><button class="btn btn-sm btn-danger-soft" title="Eliminar" onclick="event.stopPropagation();Deleted.remove([${r.id}])">🗑</button></td>
+      </tr>`).join('')
+      : '<tr><td style="text-align:center;padding:20px;color:#94a3b8;">Sin elementos detectados</td></tr>';
   }
 
   function _renderKPIs(s) {
