@@ -5679,5 +5679,24 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-11-10T16:55:59"
+  },
+  {
+    "item_id": 300,
+    "executive_summary": "Documento Norma CMF emitido por CMF. Título: Lavado de Activos Virtuales: Rol de la CMF y Obligaciones de las Entidades Fintech. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "AML",
+    "risk_score": 35,
+    "risk_level": "medio",
+    "applies": "revisar",
+    "applies_reason": "Posible impacto. Requiere revisión.",
+    "suggested_area": "Compliance",
+    "criticality": "medio",
+    "recommended_action": "Evaluar aplicabilidad con Compliance/Legal.",
+    "analyzed_at": "2026-11-12T17:29:59"
   }
 ]
