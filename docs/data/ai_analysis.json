@@ -5888,5 +5888,24 @@
     "criticality": "bajo",
     "recommended_action": "Archivar. Monitorear actualizaciones.",
     "analyzed_at": "2026-11-25T19:04:49"
+  },
+  {
+    "item_id": 311,
+    "executive_summary": "Documento Norma CMF emitido por CMF. Título: CMF pone en consulta pública propuesta normativa que establece el deber de remitir información sobre programas e iniciativas de educación financiera. Revisión manual recomendada.",
+    "main_changes": "Ver texto original.",
+    "possible_impact": "Por determinar mediante revisión manual.",
+    "affected_areas": "Compliance, Legal",
+    "affected_products": "Por determinar",
+    "detected_obligations": "Ver texto original.",
+    "max_application_date": null,
+    "thematic_classification": "Tributario",
+    "risk_score": 20,
+    "risk_level": "bajo",
+    "applies": "revisar",
+    "applies_reason": "Impacto no determinado.",
+    "suggested_area": "Legal",
+    "criticality": "bajo",
+    "recommended_action": "Archivar. Monitorear actualizaciones.",
+    "analyzed_at": "2026-11-26T18:56:34"
   }
 ]
